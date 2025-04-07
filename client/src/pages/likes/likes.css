@@ -5,9 +5,9 @@
   }
   
   .main-content {
-    margin-left: 220px; /* Adjust for the width of the left bar */
+    margin-left: 220px; 
     padding: 20px;
-    width: calc(100% - 220px); /* Adjust for the width of the left bar */
+    width: calc(100% - 220px); 
     
   }
   
@@ -16,25 +16,27 @@
     align-items: center;
     margin-bottom: 20px;
     background-color:black;
-    height: 200px;
+    height: 300px;
   }
   
   .likes-icon {
-    font-size: 60px;
+    font-size: 100px;
     color: white;
     margin-right: 20px;
+    margin-left: 300px;
   }
   
   .likes-title {
-    font-size: 48px;
+    font-size: 80px;
     color: white;
     margin-right: auto;
   }
   
   .user-info {
     display: flex;
+    size: 300px;
     align-items: center;
-    margin-right: 200px;
+    margin-right: 500px;
   }
   
   .profile-pic {
@@ -50,7 +52,7 @@
   }
   
   .username {
-    font-size: 16px;
+    font-size: 25px;
     color: white;
     margin: 0;
   }
