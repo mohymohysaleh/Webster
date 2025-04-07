@@ -1,0 +1,97 @@
+.media-player {
+    background-color: #1f1f1f; /* Changed to blue */
+    color: white;
+    width: 100%;
+    padding: 20px; /* Increased padding for more height */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px; /* Increased height */
+  }
+  
+  .media-player-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .like-icon {
+    margin-right: 10px;
+    cursor: pointer;
+    color: #b3b3b3;
+  }
+  
+  .media-player-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .media-player-details h3 {
+    margin: 0;
+    font-size: 16px;
+  }
+  
+  .media-player-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #b3b3b3;
+  }
+  
+  .media-player-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right:20px ;
+  }
+  
+  .media-player-controls {
+    display: flex;
+    align-items: center;
+  }
+  
+  .media-player-controls i {
+    margin: 0 15px;
+    cursor: pointer;
+    color: #b3b3b3;
+  }
+  
+  .play-button {
+    background-color: red; /* Red background for play button */
+    border-radius: 70%; /* Circular shape */
+    padding: 15px; /* Adjust padding to fit the icon */
+    color: white; /* Ensure text color contrasts */
+  }
+  
+  .media-player-progress {
+    width: 200%;
+    margin-top: 17px;
+    height: 1px;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    background-color: #333;
+    height: 5px; /* Increased height for progress bar */
+    position: relative;
+
+  }
+  
+  .progress {
+    width: 50%;
+    background-color: #b3b3b3;
+    height: 100%;
+  }
+  
+  .media-player-right {
+    display: flex;
+    align-items: center;
+    margin-right: 150px;
+  }
+  
+  .media-player-right i {
+    cursor: pointer;
+    color: #b3b3b3;
+  }
+  
