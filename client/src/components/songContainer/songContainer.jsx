@@ -1,6 +1,7 @@
 import React from 'react';
 import './songContainer.css';
 
+
 const songs = [
   { id: 1, title: 'Play It Safe', artist: 'Julia Wolf', album: 'Play It Safe', duration: '2:12' },
   { id: 2, title: 'Ocean Front Apt.', artist: 'ayokay', album: 'In the Shape of a Dream', duration: '2:12' },
