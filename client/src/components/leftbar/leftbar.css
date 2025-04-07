@@ -12,13 +12,17 @@
   .left-bar-item {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px; /* Consolidated margin-bottom */
     cursor: pointer;
-    margin-bottom: 30px;
-    
+    padding: 10px; /* Add padding for better hover effect */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
   }
   
-  .left-bar-item i {
-    margin-right: 10px;
+  .left-bar-item svg {
+    margin-right: 10px; /* Add space between the icon and the text */
+  }
+  
+  .left-bar-item:hover {
+    background-color: #333; /* Dark gray background on hover */
   }
   
