@@ -7,7 +7,6 @@ import './leftbar.css';
 
 const navigationItems = [
   { icon: Home, label: "Home", href: "../../pages/home/home" }
-  // Add other navigation items here if needed
 ];
 
 const LeftBar = () => {

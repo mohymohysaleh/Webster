@@ -36,6 +36,10 @@ const SongContainer = () => {
               <div className="song-details">
                 <p className="song-title">{song.title}</p>
                 <p className="song-artist">{song.artist}</p>
+                {/* <p className="song-id">{song.id}</p>
+                <p className="song-album">{song.album}</p>
+                <p className="song-duration">{song.duration}</p> */}
+
               </div>
             </div>
             <span>{song.album}</span>
