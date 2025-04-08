@@ -9,15 +9,18 @@
     padding: 20px;
     width: calc(100% - 220px); 
     background-color: black;
-    
+    position:foxed;
   }
   
   .likes-header {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    margin-top: -25px;
+    margin-right: -20px;
     height: 300px;
     background: linear-gradient(to bottom, rgb(98, 0, 0), black); /* Gradient from red to black */
+    position:static;
   }
   
   
