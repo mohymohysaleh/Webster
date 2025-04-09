@@ -1,14 +1,19 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const path = require('path');
+require('dotenv').config();
 
-dotenv.config();
+Mongo_Uri = 'mongodb://127.0.0.1:27017/Webster';
+
+// Specify the path to the .env file
+dotenv.config({ path: path.join(__dirname, '../.env') });
 
 // Log the MongoDB URI to verify it's being read correctly
-console.log('MongoDB URI:', process.env.MONGO_URI);
+// console.log('MongoDB URI:', process.env.MONGO_URI);
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+    await mongoose.connect(Mongo_Uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
