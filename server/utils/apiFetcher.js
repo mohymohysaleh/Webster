@@ -1,8 +1,14 @@
 const axios = require('axios');
 
 const fetchMusicData = async () => {
-  const response = await axios.get('YOUR_MUSIC_API_URL');
-  return response.data;
+  try {
+    const response = await axios.get('https://api.jamendo.com/v3.0/tracks/?client_id=1e38fb9b'); // Replace with your actual API URL
+    return response.data; // Ensure this matches the structure you expect
+  } catch (error) {
+    console.error('Error fetching music data:', error);
+    throw error;
+  }
 };
 
 module.exports = fetchMusicData;
+
