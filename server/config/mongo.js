@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-// Load environment variables from .env file
 dotenv.config();
+
+// Log the MongoDB URI to verify it's being read correctly
+console.log('MongoDB URI:', process.env.MONGO_URI);
 
 const connectDB = async () => {
   try {
@@ -12,9 +14,10 @@ const connectDB = async () => {
     });
     console.log('MongoDB connected');
   } catch (err) {
-    console.error(err.message);
+    console.error('MongoDB connection error:', err.message);
     process.exit(1);
   }
 };
 
+connectDB();
 module.exports = connectDB;
