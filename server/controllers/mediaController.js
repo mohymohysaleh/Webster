@@ -1,7 +1,7 @@
 const Music = require('../models/song');
 const fetchMusicData = require('../utils/apiFetcher');
 
-// Function to get music data
+//music data
 exports.getMusicData = async (req, res) => {
   try {
     const apiResponse = await fetchMusicData();
