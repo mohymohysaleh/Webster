@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const path = require('path');
-require('dotenv').config();
+// const dotenv = require('dotenv');
+// const path = require('path');
+// require('dotenv').config();
 
 Mongo_Uri = 'mongodb://127.0.0.1:27017/Webster';
 
