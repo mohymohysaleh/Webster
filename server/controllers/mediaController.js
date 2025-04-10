@@ -22,7 +22,6 @@ exports.getMusicData = async (req, res) => {
   }
 };
 
-// Function to delete music data
 exports.deleteMusicData = async (req, res) => {
   try {
     const { id } = req.query; // Assuming you pass the ID as a query parameter
