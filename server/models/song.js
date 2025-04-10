@@ -9,4 +9,4 @@ const MusicSchema = new mongoose.Schema({
   image: { type: String, required: true }
 });
 
-module.exports = mongoose.model('Music', MusicSchema);
+module.exports = mongoose.model('Music', MusicSchema, 'Music');
