@@ -1,0 +1,80 @@
+/* TopMixCard styles */
+.top-mix-image-container {
+    position: relative;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 8px;
+    width: 100%;
+    padding-bottom: 100%;
+  }
+  
+  .top-mix-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .top-mix-indicator {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 4px;
+    width: 64px;
+    border-radius: 2px;
+  }
+  
+  .top-mix-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 25%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+  }
+  
+  .top-mix-overlay-title {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  
+  /* Color variants */
+  .yellow .top-mix-indicator {
+    background-color: #ffc107;
+  }
+  
+  .pink .top-mix-indicator {
+    background-color: #e83e8c;
+  }
+  
+  .green .top-mix-indicator {
+    background-color: #28a745;
+  }
+  
+  .red .top-mix-indicator {
+    background-color: #dc3545;
+  }
+  
+  .teal .top-mix-indicator {
+    background-color: #20c997;
+  }
+  
+  /* Default color if none specified */
+  .top-mix-indicator {
+    background-color: #6c757d;
+  }
+  
+  /* Hover effects */
+  .top-mix-image-container:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  

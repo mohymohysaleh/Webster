@@ -1,3 +1,5 @@
+import "./PlaylistsPage.css"
+
 export default function PlaylistsPage() {
   return (
     <div className="p-4">

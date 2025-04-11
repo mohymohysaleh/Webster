@@ -1,7 +1,8 @@
 "use client"
-import Img1 from '../assets/images/amr.png'
+
 import { useState } from "react"
 import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Volume2, Heart } from "lucide-react"
+import "./MusicPlayer.css"
 
 export function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(true)
@@ -15,7 +16,7 @@ export function MusicPlayer() {
         {/* Currently playing */}
         <div className="col-3 d-flex align-items-center gap-3">
           <div className="bg-secondary" style={{ width: "48px", height: "48px" }}>
-            <img src={Img1} alt="Album cover" className="w-100 h-100 object-fit-cover" />
+            <img src="/placeholder.svg?height=48&width=48" alt="Album cover" className="w-100 h-100 object-fit-cover" />
           </div>
           <div>
             <div className="small fw-medium">Ragea</div>

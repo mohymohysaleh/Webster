@@ -1,7 +1,5 @@
-import { PlaylistCard } from "../../components/PlaylistCard"
-import { TopMixCard } from "../../components/TopMixCard"
-import Img1 from '../../assets/images/daily.jpg'
-import Img2 from '../../assets/images/afr.jpg'
+import { PlaylistCard } from "../../components/playlist-card/PlaylistCard"
+import { TopMixCard } from "../../components/top-mix-card/TopMixCard"
 
 export default function HomePage() {
   return (
@@ -13,22 +11,22 @@ export default function HomePage() {
         {/* Featured playlists grid */}
         <div className="row g-3 mb-4">
           <div className="col-12 col-md-6 col-lg-4">
-            <PlaylistCard title="Chill Mix" image={Img1} />
+            <PlaylistCard title="Chill Mix" image="/placeholder.svg?height=48&width=48" />
           </div>
           <div className="col-12 col-md-6 col-lg-4">
-            <PlaylistCard title="Pop Mix" image={Img2} />
+            <PlaylistCard title="Pop Mix" image="/placeholder.svg?height=48&width=48" />
           </div>
           <div className="col-12 col-md-6 col-lg-4">
-            <PlaylistCard title="Daily Mix 1" image={Img1} />
+            <PlaylistCard title="Daily Mix 1" image="/placeholder.svg?height=48&width=48" />
           </div>
           <div className="col-12 col-md-6 col-lg-4">
-            <PlaylistCard title="Daily Mix 5" image={Img2} />
+            <PlaylistCard title="Daily Mix 5" image="/placeholder.svg?height=48&width=48" />
           </div>
           <div className="col-12 col-md-6 col-lg-4">
-            <PlaylistCard title="Folk & Acoustic Mix" image={Img1} />
+            <PlaylistCard title="Folk & Acoustic Mix" image="/placeholder.svg?height=48&width=48" />
           </div>
           <div className="col-12 col-md-6 col-lg-4">
-            <PlaylistCard title="Daily Mix 4" image={Img2} />
+            <PlaylistCard title="Daily Mix 4" image="/placeholder.svg?height=48&width=48" />
           </div>
         </div>
       </div>
@@ -45,7 +43,7 @@ export default function HomePage() {
             <TopMixCard
               title="Chill Mix"
               artists="Julia Wolf, Khalid, ayokay and more"
-              image= {Img1}
+              image="/placeholder.svg?height=200&width=200"
               color="yellow"
             />
           </div>
@@ -53,7 +51,7 @@ export default function HomePage() {
             <TopMixCard
               title="Pop Mix"
               artists="Hey Violet, VERITE, Timeflies and more"
-              image={Img2}
+              image="/placeholder.svg?height=200&width=200"
               color="pink"
             />
           </div>
@@ -61,7 +59,7 @@ export default function HomePage() {
             <TopMixCard
               title="Pheelz Mix"
               artists="WizKid, Asake, Tiwa Savage and more"
-              image={Img1}
+              image="/placeholder.svg?height=200&width=200"
               color="green"
             />
           </div>
@@ -69,7 +67,7 @@ export default function HomePage() {
             <TopMixCard
               title="Indie Mix"
               artists="Joywave, The xx, The Neighbourhood and more"
-              image={Img2}
+              image="/placeholder.svg?height=200&width=200"
               color="red"
             />
           </div>
@@ -77,7 +75,7 @@ export default function HomePage() {
             <TopMixCard
               title="Daily Mix 1"
               artists="Ayra Starr, Lil Kesh, Ed Sheeran and more"
-              image={Img1}
+              image="/placeholder.svg?height=200&width=200"
               color="teal"
             />
           </div>

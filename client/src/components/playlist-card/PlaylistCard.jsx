@@ -1,3 +1,5 @@
+import "./PlaylistCard.css"
+
 export function PlaylistCard({ title, image }) {
   return (
     <div className="d-flex align-items-center gap-3 bg-black bg-opacity-25 rounded p-3 playlist-card">

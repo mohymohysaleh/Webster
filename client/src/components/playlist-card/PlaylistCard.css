@@ -1,0 +1,8 @@
+.playlist-card {
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.playlist-card:hover {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}

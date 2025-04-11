@@ -11,12 +11,6 @@ body {
   overflow: hidden;
 }
 
-/* Sidebar styles */
-.sidebar {
-  width: 240px;
-  height: 100%;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
@@ -35,37 +29,10 @@ body {
   background: #555;
 }
 
-/* Playlist card hover effect */
-.playlist-card {
-  transition: background-color 0.2s;
-  cursor: pointer;
-}
-
-.playlist-card:hover {
-  background-color: rgba(0, 0, 0, 0.4) !important;
-}
-
 /* Fix for music player to have proper spacing from bottom */
 main {
   padding-bottom: 80px;
-}
-
-/* Music player styles */
-.music-player {
-  height: 70px;
-}
-
-/* Override some Bootstrap defaults */
-.btn-link {
-  text-decoration: none;
-}
-
-.nav-link {
-  transition: color 0.2s;
-}
-
-.nav-link:hover {
-  color: #fff !important;
+  width: 100%;
 }
 
 /* Fix for Bootstrap's container padding */

@@ -1,0 +1,27 @@
+.sidebar {
+  width: 240px;
+  height: 100%;
+}
+
+.nav-link {
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #fff !important;
+}
+
+.app-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.logo-link {
+  display: inline-block;
+  transition: opacity 0.2s;
+}
+
+.logo-link:hover {
+  opacity: 0.8;
+}
