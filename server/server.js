@@ -6,12 +6,10 @@
 //   console.log(`Server is running on http://localhost:${PORT}`)
 // });
 
-
 const app = require('./app');
 const { getMusicData } = require('./controllers/mediaController');
 
 const PORT = process.env.PORT || 5000;
-
 const server = app.listen(PORT, async () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 

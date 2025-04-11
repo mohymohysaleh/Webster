@@ -1,6 +1,18 @@
 const Music = require('../models/song');
 const fetchMusicData = require('../utils/apiFetcher');
 
+// Fetch data from MongoDB
+exports.getMusicDataFromDB = async (req, res) => {
+  try {
+    const musicDocs = await Music.find();
+    res.json(musicDocs);
+  } catch (err) {
+    console.error('Error fetching music data from DB:', err);
+    res.status(500).send('Server Error');
+  }
+};
+
+// Fetch data from API and insert into MongoDB
 exports.getMusicData = async (req, res) => {
   try {
     const apiResponse = await fetchMusicData();
@@ -27,23 +39,3 @@ exports.getMusicData = async (req, res) => {
     }
   }
 };
-
-// exports.deleteMusicData = async (req, res) => {
-//   try {
-
-//     const { id } = req.query; 
-//     if (!id) {
-//       return res.status(400).send('ID is required');
-//     }
-
-//     const result = await Music.findByIdAndDelete(id);
-//     if (!result) {
-//       return res.status(404).send('Music not found');
-//     }
-
-//     res.json({ message: 'Music deleted successfully', data: result });
-//   } catch (err) {
-//     console.error('Error deleting music data:', err);
-//     res.status(500).send('Server Error');
-//   }
-// };

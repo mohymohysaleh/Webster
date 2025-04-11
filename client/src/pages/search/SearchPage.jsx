@@ -1,115 +1,16 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { IoSearchOutline, IoClose } from "react-icons/io5"
-import "./SearchPage.css"
-
-// Sample music database with songs and artists
-const musicDatabase = [
-  {
-    id: "1",
-    title: "Play It Safe",
-    artist: "Julia Wolf",
-    album: "Play It Safe",
-    duration: "2:12",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "2",
-    title: "Ocean Front Apt.",
-    artist: "ayokay",
-    album: "In the Shape of a Dream",
-    duration: "2:12",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "3",
-    title: "Free Spirit",
-    artist: "Khalid",
-    album: "Free Spirit",
-    duration: "3:02",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "4",
-    title: "Remind You",
-    artist: "FRENSHIP",
-    album: "Vacation",
-    duration: "4:25",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "5",
-    title: "Same Old",
-    artist: "SHY Martin",
-    album: "Same Old",
-    duration: "2:56",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "6",
-    title: "Blinding Lights",
-    artist: "The Weeknd",
-    album: "After Hours",
-    duration: "3:20",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "7",
-    title: "Save Your Tears",
-    artist: "The Weeknd",
-    album: "After Hours",
-    duration: "3:35",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "8",
-    title: "Starboy",
-    artist: "The Weeknd",
-    album: "Starboy",
-    duration: "3:50",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "9",
-    title: "Shape of You",
-    artist: "Ed Sheeran",
-    album: "÷ (Divide)",
-    duration: "3:53",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "10",
-    title: "Perfect",
-    artist: "Ed Sheeran",
-    album: "÷ (Divide)",
-    duration: "4:23",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "11",
-    title: "Thinking Out Loud",
-    artist: "Ed Sheeran",
-    album: "x (Multiply)",
-    duration: "4:41",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-  {
-    id: "12",
-    title: "Photograph",
-    artist: "Ed Sheeran",
-    album: "x (Multiply)",
-    duration: "4:19",
-    imageUrl: "/placeholder.svg?height=80&width=80",
-  },
-]
+import { useState, useEffect } from "react";
+import { IoSearchOutline, IoClose } from "react-icons/io5";
+import "./SearchPage.css";
 
 export default function SearchPage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [showRecentSearches, setShowRecentSearches] = useState(false)
-  const [searchResults, setSearchResults] = useState([])
-  const [showSearchResults, setShowSearchResults] = useState(false)
-  const [selectedArtist, setSelectedArtist] = useState(null)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showRecentSearches, setShowRecentSearches] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState(null);
+  const [musicDatabase, setMusicDatabase] = useState([]);
 
   const recentSearches = [
     {
@@ -127,7 +28,7 @@ export default function SearchPage() {
     { id: "3", name: "Blinding Lights", type: "Song", imageUrl: "/placeholder.svg?height=80&width=80" },
     { id: "4", name: "Taylor Swift", type: "Artist", imageUrl: "/placeholder.svg?height=80&width=80" },
     { id: "5", name: "Shape of You", type: "Song", imageUrl: "/placeholder.svg?height=80&width=80" },
-  ]
+  ];
 
   const categories = [
     {
@@ -148,7 +49,7 @@ export default function SearchPage() {
     { id: "l1", name: "Live Events", color: "#7358FF", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "r1", name: "Rock", color: "#E61E32", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "e1", name: "Electronic", color: "#0D73EC", imageUrl: "/placeholder.svg?height=120&width=120" },
-  ]
+  ];
 
   const topGenres = [
     {
@@ -167,51 +68,66 @@ export default function SearchPage() {
     { id: "la1", name: "Latin", color: "#E1118C", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "in1", name: "Indie", color: "#608108", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "cl1", name: "Classical", color: "#7D4B32", imageUrl: "/placeholder.svg?height=120&width=120" },
-  ]
+  ];
+
+  // Fetch music data from the backend
+  useEffect(() => {
+    const fetchMusicData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/music/db');
+        const data = await response.json();
+        setMusicDatabase(data);
+      } catch (error) {
+        console.error('Error fetching music data:', error);
+      }
+    };
+
+    fetchMusicData();
+  }, []);
 
   // Search functionality
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      setShowSearchResults(false)
-      setSelectedArtist(null)
-      return
+      setShowSearchResults(false);
+      setSelectedArtist(null);
+      return;
     }
 
-    const query = searchQuery.toLowerCase()
+    const query = searchQuery.toLowerCase();
 
     // Check if searching for an artist
-    const artistMatch = musicDatabase.find((song) => song.artist.toLowerCase() === query)
+    const artistMatch = musicDatabase.find((song) => song.artist.toLowerCase() === query);
 
     if (artistMatch) {
       // If exact artist match, show all songs by that artist
-      setSelectedArtist(artistMatch.artist)
-      const artistSongs = musicDatabase.filter((song) => song.artist.toLowerCase() === query)
-      setSearchResults(artistSongs)
+      setSelectedArtist(artistMatch.artist);
+      const artistSongs = musicDatabase.filter((song) => song.artist.toLowerCase() === query);
+      setSearchResults(artistSongs);
     } else {
       // Otherwise search for songs that match the query in title or artist
-      setSelectedArtist(null)
+      setSelectedArtist(null);
       const results = musicDatabase.filter(
-        (song) => song.title.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query),
-      )
-      setSearchResults(results)
+        (song) => song.name.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query),
+      );
+      setSearchResults(results);
     }
 
-    setShowSearchResults(true)
-  }, [searchQuery])
+    setShowSearchResults(true);
+  }, [searchQuery, musicDatabase]);
 
   const handleRemoveRecent = (id) => {
-    console.log("Remove recent search:", id)
-  }
+    console.log("Remove recent search:", id);
+  };
 
   const handleItemClick = (item) => {
-    setSearchQuery(item.name)
-    setShowRecentSearches(false)
-  }
+    setSearchQuery(item.name);
+    setShowRecentSearches(false);
+  };
 
   const handleSongClick = (song) => {
-    console.log("Playing song:", song.title)
+    console.log("Playing song:", song.name);
     // Here you would implement the logic to play the song
-  }
+  };
 
   return (
     <div className="search-page">
@@ -228,8 +144,8 @@ export default function SearchPage() {
               onFocus={() => setShowRecentSearches(true)}
               onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)}
               onKeyDown={(e) => {
-                if (e.key === "Escape") setSearchQuery("")
-                if (e.key === "Enter") console.log("Searching for:", searchQuery)
+                if (e.key === "Escape") setSearchQuery("");
+                if (e.key === "Enter") console.log("Searching for:", searchQuery);
               }}
             />
             {searchQuery && (
@@ -249,8 +165,8 @@ export default function SearchPage() {
                       <button
                         className="remove-search-button"
                         onClick={(e) => {
-                          e.stopPropagation()
-                          handleRemoveRecent(item.id)
+                          e.stopPropagation();
+                          handleRemoveRecent(item.id);
                         }}
                         aria-label={`Remove ${item.name}`}
                       >
@@ -288,15 +204,15 @@ export default function SearchPage() {
                 </thead>
                 <tbody>
                   {searchResults.map((song, index) => (
-                    <tr key={song.id} className="song-row" onClick={() => handleSongClick(song)}>
+                    <tr key={song._id} className="song-row" onClick={() => handleSongClick(song)}>
                       <td className="song-number">{index + 1}</td>
                       <td className="song-title">
                         <div className="song-info">
                           <div className="song-image">
-                            <img src={song.imageUrl || "/placeholder.svg"} alt={song.title} />
+                            <img src={song.image || "/placeholder.svg"} alt={song.name} />
                           </div>
                           <div className="song-details">
-                            <div className="song-name">{song.title}</div>
+                            <div className="song-name">{song.name}</div>
                             <div className="song-artist">{song.artist}</div>
                           </div>
                         </div>
@@ -350,5 +266,5 @@ export default function SearchPage() {
         )}
       </div>
     </div>
-  )
+  );
 }
