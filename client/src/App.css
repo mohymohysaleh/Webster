@@ -3,12 +3,17 @@ body {
   background-color: #000;
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 .music-app {
   background-color: #000;
   color: #fff;
   overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 }
 
 /* Custom scrollbar */
@@ -29,13 +34,37 @@ body {
   background: #555;
 }
 
-/* Fix for music player to have proper spacing from bottom */
-main {
-  padding-bottom: 80px;
-  width: 100%;
+/* Main content area */
+.main-content {
+  flex: 1;
+  width: calc(100vw - 240px); /* Full width minus sidebar width */
+  max-width: calc(100vw - 240px);
+  overflow-y: auto;
+  padding-bottom: 80px; /* Space for music player */
 }
 
 /* Fix for Bootstrap's container padding */
 .row {
   --bs-gutter-x: 1.5rem;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* Remove any unwanted margins */
+.container,
+.container-fluid {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  max-width: none !important;
+}
+
+/* Ensure all pages take full width */
+.likes-page,
+.playlists-page,
+.playlist-detail-page,
+.search-page {
+  width: 100%;
+  max-width: 100%;
 }

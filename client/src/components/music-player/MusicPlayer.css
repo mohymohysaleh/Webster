@@ -1,7 +1,37 @@
 .music-player {
   height: 70px;
+  width: 100vw; /* Full viewport width */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: #000;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-link {
   text-decoration: none;
+}
+
+.music-player-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 16px;
+}
+
+/* Ensure the player row takes full width */
+.music-player .row {
+  width: 100%;
+  margin: 0;
+}
+
+/* Make sure columns have proper sizing */
+.music-player .col-3,
+.music-player .col-6 {
+  padding: 0 8px;
+}
+
+/* Ensure progress bar displays properly */
+.music-player .progress {
+  width: 100%;
 }

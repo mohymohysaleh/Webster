@@ -17,8 +17,7 @@ function App() {
       <BrowserRouter>
         <div className="d-flex vh-100 music-app">
           <Sidebar />
-
-          <main className="flex-grow-1 overflow-auto w-100">
+          <div className="main-content">
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/search" element={<SearchPage />} />
@@ -27,8 +26,7 @@ function App() {
               <Route path="/likes" element={<LikesPage />} />
               <Route path="/create-playlist" element={<CreatePlaylistPage />} />
             </Routes>
-          </main>
-
+          </div>
           <MusicPlayer />
         </div>
       </BrowserRouter>

@@ -48,92 +48,94 @@ export function MusicPlayer() {
   }
 
   return (
-    <div className="fixed-bottom bg-black border-top border-dark px-3 py-2 music-player">
+    <div className="fixed-bottom bg-black border-top border-dark music-player">
       {currentSong.audio && (
         <audio ref={audioRef} src={currentSong.audio} preload="metadata" autoPlay onEnded={skipNext} />
       )}
 
-      <div className="row align-items-center">
-        {/* Now Playing */}
-        <div className="col-3 d-flex align-items-center gap-3">
-          <div className="bg-secondary" style={{ width: "48px", height: "48px" }}>
-            <img
-              src={currentSong.image || "/placeholder.svg"}
-              alt="Album cover"
-              className="w-100 h-100 object-fit-cover"
-            />
-          </div>
-          <div>
-            <div className="small fw-medium">{currentSong.name || "Loading..."}</div>
-            <div className="small text-secondary">{currentSong.artist || ""}</div>
-          </div>
-          <button
-            className={`btn btn-link p-0 ms-2 ${isFavorite ? "text-danger" : "text-secondary"}`}
-            onClick={toggleFavorite}
-          >
-            <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
-          </button>
-        </div>
-
-        {/* Controls */}
-        <div className="col-6 d-flex flex-column align-items-center">
-          <div className="d-flex align-items-center gap-4 mb-2">
-            <button className="btn btn-link p-0 text-secondary">
-              <Shuffle size={16} />
-            </button>
-            <button className="btn btn-link p-0 text-secondary" onClick={skipPrev}>
-              <SkipBack size={20} />
-            </button>
+      <div className="music-player-container">
+        <div className="row align-items-center">
+          {/* Now Playing */}
+          <div className="col-3 d-flex align-items-center gap-3">
+            <div className="bg-secondary" style={{ width: "48px", height: "48px" }}>
+              <img
+                src={currentSong.image || "/placeholder.svg"}
+                alt="Album cover"
+                className="w-100 h-100 object-fit-cover"
+              />
+            </div>
+            <div>
+              <div className="small fw-medium">{currentSong.name || "Loading..."}</div>
+              <div className="small text-secondary">{currentSong.artist || ""}</div>
+            </div>
             <button
-              className="btn btn-danger rounded-circle d-flex align-items-center justify-content-center"
-              style={{ width: "36px", height: "36px" }}
-              onClick={togglePlay}
+              className={`btn btn-link p-0 ms-2 ${isFavorite ? "text-danger" : "text-secondary"}`}
+              onClick={toggleFavorite}
             >
-              {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-            </button>
-            <button className="btn btn-link p-0 text-secondary" onClick={skipNext}>
-              <SkipForward size={20} />
-            </button>
-            <button className="btn btn-link p-0 text-secondary">
-              <Repeat size={16} />
+              <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
             </button>
           </div>
 
-          {/* Seek Bar */}
-          <div className="d-flex align-items-center gap-2 w-100 small text-secondary">
-            <span>{formatTime((duration * progress) / 100)}</span>
+          {/* Controls */}
+          <div className="col-6 d-flex flex-column align-items-center">
+            <div className="d-flex align-items-center gap-4 mb-2">
+              <button className="btn btn-link p-0 text-secondary">
+                <Shuffle size={16} />
+              </button>
+              <button className="btn btn-link p-0 text-secondary" onClick={skipPrev}>
+                <SkipBack size={20} />
+              </button>
+              <button
+                className="btn btn-danger rounded-circle d-flex align-items-center justify-content-center"
+                style={{ width: "36px", height: "36px" }}
+                onClick={togglePlay}
+              >
+                {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+              </button>
+              <button className="btn btn-link p-0 text-secondary" onClick={skipNext}>
+                <SkipForward size={20} />
+              </button>
+              <button className="btn btn-link p-0 text-secondary">
+                <Repeat size={16} />
+              </button>
+            </div>
+
+            {/* Seek Bar */}
+            <div className="d-flex align-items-center gap-2 w-100 small text-secondary">
+              <span>{formatTime((duration * progress) / 100)}</span>
+              <div
+                className="progress flex-grow-1"
+                style={{ height: "4px", cursor: "pointer" }}
+                onClick={(e) => {
+                  const rect = e.target.getBoundingClientRect()
+                  const percent = ((e.clientX - rect.left) / rect.width) * 100
+                  setProgress(percent)
+                  if (audioRef.current) {
+                    audioRef.current.currentTime = (duration * percent) / 100
+                  }
+                }}
+              >
+                <div className="progress-bar bg-danger" role="progressbar" style={{ width: `${progress}%` }}></div>
+              </div>
+              <span>{formatTime(duration)}</span>
+            </div>
+          </div>
+
+          {/* Volume */}
+          <div className="col-3 d-flex align-items-center justify-content-end gap-2">
+            <Volume2 size={16} className="text-secondary" />
             <div
-              className="progress flex-grow-1"
-              style={{ height: "4px", cursor: "pointer" }}
+              className="progress"
+              style={{ width: "100px", height: "4px", cursor: "pointer" }}
               onClick={(e) => {
                 const rect = e.target.getBoundingClientRect()
                 const percent = ((e.clientX - rect.left) / rect.width) * 100
-                setProgress(percent)
-                if (audioRef.current) {
-                  audioRef.current.currentTime = (duration * percent) / 100
-                }
+                setVolume(percent)
+                if (audioRef.current) audioRef.current.volume = percent / 100
               }}
             >
-              <div className="progress-bar bg-danger" role="progressbar" style={{ width: `${progress}%` }}></div>
+              <div className="progress-bar bg-danger" style={{ width: `${volume}%` }}></div>
             </div>
-            <span>{formatTime(duration)}</span>
-          </div>
-        </div>
-
-        {/* Volume */}
-        <div className="col-3 d-flex align-items-center justify-content-end gap-2">
-          <Volume2 size={16} className="text-secondary" />
-          <div
-            className="progress"
-            style={{ width: "100px", height: "4px", cursor: "pointer" }}
-            onClick={(e) => {
-              const rect = e.target.getBoundingClientRect()
-              const percent = ((e.clientX - rect.left) / rect.width) * 100
-              setVolume(percent)
-              if (audioRef.current) audioRef.current.volume = percent / 100
-            }}
-          >
-            <div className="progress-bar bg-danger" style={{ width: `${volume}%` }}></div>
           </div>
         </div>
       </div>

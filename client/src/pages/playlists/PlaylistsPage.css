@@ -1,34 +1,49 @@
-
 .playlists-page {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     background: linear-gradient(to bottom, #1e3264, #000000);
+    padding-bottom: 80px; /* Add padding to ensure content is visible above music player */
+    max-width: 100%;
   }
   
   .playlists-header {
-    padding: 40px 32px 24px;
+    padding: 60px 32px 24px;
+    width: 100%;
   }
   
   .playlists-title {
-    font-size: 32px;
-    font-weight: 700;
+    font-size: 72px;
+    font-weight: 900;
     color: #ffffff;
-    margin-bottom: 24px;
+    margin: 0;
+    line-height: 1;
+  }
+  
+  .playlists-subtitle {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 8px;
   }
   
   .playlists-content {
-    padding: 0 32px 32px;
+    padding: 24px 32px 32px;
+    flex-grow: 1;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 100%;
   }
   
   .playlists-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    display: flex;
+    flex-direction: column;
     gap: 16px;
+    width: 100%;
   }
   
   .playlist-item {
+    width: 100%;
     transition: transform 0.2s ease;
   }
   
@@ -36,17 +51,31 @@
     transform: translateY(-4px);
   }
   
+  .empty-playlists {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+  }
+  
   @media (max-width: 768px) {
     .playlists-header {
-      padding: 24px 16px 16px;
+      padding: 40px 16px 20px;
+    }
+  
+    .playlists-title {
+      font-size: 48px;
     }
   
     .playlists-content {
-      padding: 0 16px 24px;
+      padding: 16px 16px 24px;
     }
+  }
   
-    .playlists-grid {
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  @media (max-width: 576px) {
+    .playlists-title {
+      font-size: 36px;
     }
   }
   

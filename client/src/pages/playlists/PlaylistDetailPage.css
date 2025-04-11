@@ -3,6 +3,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding-bottom: 80px; /* Add padding to ensure last song is visible above music player */
+    max-width: 100%;
   }
   
   .playlist-detail-header {
@@ -78,6 +80,14 @@
   .playlist-detail-content {
     padding: 0 32px 32px;
     flex-grow: 1;
+    overflow-y: auto;
+    width: 100%;
+  }
+  
+  /* Song table styles for playlist detail page */
+  .playlist-detail-content .song-table {
+    margin-bottom: 80px; /* Add margin to ensure last song is visible */
+    width: 100%;
   }
   
   /* Responsive adjustments */

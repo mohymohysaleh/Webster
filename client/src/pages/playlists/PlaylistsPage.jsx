@@ -54,7 +54,8 @@ export default function PlaylistsPage() {
   return (
     <div className="playlists-page">
       <div className="playlists-header">
-        <h1 className="playlists-title">Your Playlists</h1>
+        <h1 className="playlists-title">Playlists</h1>
+        <div className="playlists-subtitle">Your personal collections and mixes</div>
       </div>
 
       <div className="playlists-content">
@@ -72,7 +73,7 @@ export default function PlaylistsPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center text-secondary mt-5">
+          <div className="empty-playlists text-center text-secondary mt-5">
             <p>You don't have any playlists yet</p>
             <button className="btn btn-outline-light mt-3">Create Playlist</button>
           </div>
