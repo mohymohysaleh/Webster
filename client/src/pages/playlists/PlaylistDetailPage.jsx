@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { useMusic } from "../../context/MusicContext"
 import "./PlaylistDetailPage.css"
+import Img1 from '../../assets/images/afr.jpg'
 
 export default function PlaylistDetailPage() {
   const { id } = useParams()
@@ -19,7 +20,7 @@ export default function PlaylistDetailPage() {
           title: "Chill Mix",
           description: "Relaxing tunes to unwind",
           color: "#8c67ab",
-          image: "/placeholder.svg?height=200&width=200",
+          image: Img1,
         },
         "pop-mix": {
           title: "Pop Mix",

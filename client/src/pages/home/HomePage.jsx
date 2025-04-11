@@ -1,13 +1,14 @@
 import { PlaylistCard } from "../../components/playlist-card/PlaylistCard"
 import { TopMixCard } from "../../components/top-mix-card/TopMixCard"
-
+import Img1 from '../../assets/images/daily.jpg'
+import Img2 from '../../assets/images/afr.jpg'
 export default function HomePage() {
   // Playlist IDs for navigation
   const featuredPlaylists = [
-    { id: "chill-mix", title: "Chill Mix", image: "/placeholder.svg?height=48&width=48" },
+    { id: "chill-mix", title: "Chill Mix", image: Img1 },
     { id: "pop-mix", title: "Pop Mix", image: "/placeholder.svg?height=48&width=48" },
-    { id: "daily-mix-1", title: "Daily Mix 1", image: "/placeholder.svg?height=48&width=48" },
-    { id: "daily-mix-5", title: "Daily Mix 5", image: "/placeholder.svg?height=48&width=48" },
+    { id: "daily-mix-1", title: "Daily Mix 1", image: Img1 },
+    { id: "daily-mix-2", title: "Daily Mix 2", image: Img2 },
     { id: "folk-acoustic", title: "Folk & Acoustic Mix", image: "/placeholder.svg?height=48&width=48" },
     { id: "daily-mix-4", title: "Daily Mix 4", image: "/placeholder.svg?height=48&width=48" },
   ]
