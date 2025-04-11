@@ -1,36 +1,19 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import {
-  Shuffle,
-  SkipBack,
-  Play,
-  Pause,
-  SkipForward,
-  Repeat,
-  Volume2,
-  Heart,
-} from "lucide-react"
+import { useRef, useEffect, useState } from "react"
+import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Volume2, Heart } from "lucide-react"
+import { useMusic } from "../../context/MusicContext"
 import "./MusicPlayer.css"
 
 export function MusicPlayer() {
   const audioRef = useRef(null)
-  const [songs, setSongs] = useState([])
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
+  const { songs, currentIndex, isPlaying, isFavorite, togglePlay, skipNext, skipPrev, toggleFavorite } = useMusic()
+
   const [progress, setProgress] = useState(0)
   const [volume, setVolume] = useState(75)
 
   const currentSong = songs[currentIndex] || {}
   const duration = Number(currentSong.duration) || 0
-
-  useEffect(() => {
-    fetch("http://localhost:5000/api/music/db")
-      .then((res) => res.json())
-      .then((data) => setSongs(data))
-      .catch((err) => console.error("Error fetching music:", err))
-  }, [])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -53,21 +36,9 @@ export function MusicPlayer() {
   useEffect(() => {
     const audio = audioRef.current
     if (audio) {
-      isPlaying ? audio.play() : audio.pause()
+      isPlaying ? audio.play().catch((err) => console.error("Error playing audio:", err)) : audio.pause()
     }
   }, [isPlaying, currentIndex])
-
-  const togglePlay = () => setIsPlaying(!isPlaying)
-
-  const skipNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % songs.length)
-    setIsPlaying(true)
-  }
-
-  const skipPrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + songs.length) % songs.length)
-    setIsPlaying(true)
-  }
 
   const formatTime = (seconds) => {
     if (!seconds) return "0:00"
@@ -79,13 +50,7 @@ export function MusicPlayer() {
   return (
     <div className="fixed-bottom bg-black border-top border-dark px-3 py-2 music-player">
       {currentSong.audio && (
-        <audio
-          ref={audioRef}
-          src={currentSong.audio}
-          preload="metadata"
-          autoPlay
-          onEnded={skipNext}
-        />
+        <audio ref={audioRef} src={currentSong.audio} preload="metadata" autoPlay onEnded={skipNext} />
       )}
 
       <div className="row align-items-center">
@@ -104,7 +69,7 @@ export function MusicPlayer() {
           </div>
           <button
             className={`btn btn-link p-0 ms-2 ${isFavorite ? "text-danger" : "text-secondary"}`}
-            onClick={() => setIsFavorite(!isFavorite)}
+            onClick={toggleFavorite}
           >
             <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
           </button>
@@ -149,11 +114,7 @@ export function MusicPlayer() {
                 }
               }}
             >
-              <div
-                className="progress-bar bg-danger"
-                role="progressbar"
-                style={{ width: `${progress}%` }}
-              ></div>
+              <div className="progress-bar bg-danger" role="progressbar" style={{ width: `${progress}%` }}></div>
             </div>
             <span>{formatTime(duration)}</span>
           </div>

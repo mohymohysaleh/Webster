@@ -1,16 +1,20 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { IoSearchOutline, IoClose } from "react-icons/io5";
-import "./SearchPage.css";
+import { useState, useEffect } from "react"
+import { IoSearchOutline, IoClose } from "react-icons/io5"
+import { useMusic } from "../../context/MusicContext"
+import "./SearchPage.css"
 
 export default function SearchPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [showRecentSearches, setShowRecentSearches] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [showSearchResults, setShowSearchResults] = useState(false);
-  const [selectedArtist, setSelectedArtist] = useState(null);
-  const [musicDatabase, setMusicDatabase] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("")
+  const [showRecentSearches, setShowRecentSearches] = useState(false)
+  const [searchResults, setSearchResults] = useState([])
+  const [showSearchResults, setShowSearchResults] = useState(false)
+  const [selectedArtist, setSelectedArtist] = useState(null)
+  const [musicDatabase, setMusicDatabase] = useState([])
+
+  // Get music context
+  const { songs, playSong } = useMusic()
 
   const recentSearches = [
     {
@@ -28,7 +32,7 @@ export default function SearchPage() {
     { id: "3", name: "Blinding Lights", type: "Song", imageUrl: "/placeholder.svg?height=80&width=80" },
     { id: "4", name: "Taylor Swift", type: "Artist", imageUrl: "/placeholder.svg?height=80&width=80" },
     { id: "5", name: "Shape of You", type: "Song", imageUrl: "/placeholder.svg?height=80&width=80" },
-  ];
+  ]
 
   const categories = [
     {
@@ -49,7 +53,7 @@ export default function SearchPage() {
     { id: "l1", name: "Live Events", color: "#7358FF", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "r1", name: "Rock", color: "#E61E32", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "e1", name: "Electronic", color: "#0D73EC", imageUrl: "/placeholder.svg?height=120&width=120" },
-  ];
+  ]
 
   const topGenres = [
     {
@@ -68,66 +72,80 @@ export default function SearchPage() {
     { id: "la1", name: "Latin", color: "#E1118C", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "in1", name: "Indie", color: "#608108", imageUrl: "/placeholder.svg?height=120&width=120" },
     { id: "cl1", name: "Classical", color: "#7D4B32", imageUrl: "/placeholder.svg?height=120&width=120" },
-  ];
+  ]
 
-  // Fetch music data from the backend
+  // Use the songs from the music context instead of fetching again
   useEffect(() => {
-    const fetchMusicData = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/music/db');
-        const data = await response.json();
-        setMusicDatabase(data);
-      } catch (error) {
-        console.error('Error fetching music data:', error);
+    if (songs.length > 0) {
+      setMusicDatabase(songs)
+    } else {
+      // Fallback to fetch if context doesn't have songs yet
+      const fetchMusicData = async () => {
+        try {
+          const response = await fetch("http://localhost:5000/api/music/db")
+          const data = await response.json()
+          setMusicDatabase(data)
+        } catch (error) {
+          console.error("Error fetching music data:", error)
+        }
       }
-    };
-
-    fetchMusicData();
-  }, []);
+      fetchMusicData()
+    }
+  }, [songs])
 
   // Search functionality
   useEffect(() => {
     if (searchQuery.trim() === "") {
-      setShowSearchResults(false);
-      setSelectedArtist(null);
-      return;
+      setShowSearchResults(false)
+      setSelectedArtist(null)
+      return
     }
 
-    const query = searchQuery.toLowerCase();
+    const query = searchQuery.toLowerCase()
 
     // Check if searching for an artist
-    const artistMatch = musicDatabase.find((song) => song.artist.toLowerCase() === query);
+    const artistMatch = musicDatabase.find((song) => song.artist.toLowerCase() === query)
 
     if (artistMatch) {
       // If exact artist match, show all songs by that artist
-      setSelectedArtist(artistMatch.artist);
-      const artistSongs = musicDatabase.filter((song) => song.artist.toLowerCase() === query);
-      setSearchResults(artistSongs);
+      setSelectedArtist(artistMatch.artist)
+      const artistSongs = musicDatabase.filter((song) => song.artist.toLowerCase() === query)
+      setSearchResults(artistSongs)
     } else {
       // Otherwise search for songs that match the query in title or artist
-      setSelectedArtist(null);
+      setSelectedArtist(null)
       const results = musicDatabase.filter(
         (song) => song.name.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query),
-      );
-      setSearchResults(results);
+      )
+      setSearchResults(results)
     }
 
-    setShowSearchResults(true);
-  }, [searchQuery, musicDatabase]);
+    setShowSearchResults(true)
+  }, [searchQuery, musicDatabase])
 
   const handleRemoveRecent = (id) => {
-    console.log("Remove recent search:", id);
-  };
+    console.log("Remove recent search:", id)
+  }
 
   const handleItemClick = (item) => {
-    setSearchQuery(item.name);
-    setShowRecentSearches(false);
-  };
+    setSearchQuery(item.name)
+    setShowRecentSearches(false)
+  }
 
-  const handleSongClick = (song) => {
-    console.log("Playing song:", song.name);
-    // Here you would implement the logic to play the song
-  };
+  // Updated to play the song when clicked
+  const handleSongClick = (song, index) => {
+    // Find the index of this song in the main songs array
+    const songIndex = songs.findIndex((s) => s._id === song._id)
+
+    if (songIndex !== -1) {
+      // If found in the main songs array, play it
+      playSong(songIndex)
+    } else {
+      // If not found (which shouldn't happen if using the same data source),
+      // we could add it to the songs array or handle differently
+      console.log("Song not found in main playlist:", song.name)
+    }
+  }
 
   return (
     <div className="search-page">
@@ -144,8 +162,8 @@ export default function SearchPage() {
               onFocus={() => setShowRecentSearches(true)}
               onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)}
               onKeyDown={(e) => {
-                if (e.key === "Escape") setSearchQuery("");
-                if (e.key === "Enter") console.log("Searching for:", searchQuery);
+                if (e.key === "Escape") setSearchQuery("")
+                if (e.key === "Enter") console.log("Searching for:", searchQuery)
               }}
             />
             {searchQuery && (
@@ -165,8 +183,8 @@ export default function SearchPage() {
                       <button
                         className="remove-search-button"
                         onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveRecent(item.id);
+                          e.stopPropagation()
+                          handleRemoveRecent(item.id)
                         }}
                         aria-label={`Remove ${item.name}`}
                       >
@@ -204,7 +222,7 @@ export default function SearchPage() {
                 </thead>
                 <tbody>
                   {searchResults.map((song, index) => (
-                    <tr key={song._id} className="song-row" onClick={() => handleSongClick(song)}>
+                    <tr key={song._id} className="song-row" onClick={() => handleSongClick(song, index)}>
                       <td className="song-number">{index + 1}</td>
                       <td className="song-title">
                         <div className="song-info">
@@ -266,5 +284,5 @@ export default function SearchPage() {
         )}
       </div>
     </div>
-  );
+  )
 }
