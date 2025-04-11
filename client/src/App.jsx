@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { MusicPlayer } from "./components/MusicPlayer"
 import { Sidebar } from "./components/Sidebar"
 import HomePage from "./pages/home/HomePage"
-import SearchPage from "./pages/home/SearchPage"
+import Search from "./pages/search/search"
 import PlaylistsPage from "./pages/home/PlaylistsPage"
 import CreatePlaylistPage from "./pages/home/CreatePlaylistPage"
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,7 +18,7 @@ function App() {
         <main className="flex-grow-1 overflow-auto">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/search" element={<SearchPage />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
             <Route path="/create-playlist" element={<CreatePlaylistPage />} />
           </Routes>
