@@ -2,15 +2,14 @@
 
 import { createContext, useState, useContext, useEffect } from "react"
 
-
 const MusicContext = createContext()
-
 
 export function MusicProvider({ children }) {
   const [songs, setSongs] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     fetch("http://localhost:5000/api/music/db")
@@ -68,6 +67,8 @@ export function MusicProvider({ children }) {
         skipPrev,
         togglePlay,
         toggleFavorite,
+        user,
+        setUser,
       }}
     >
       {children}

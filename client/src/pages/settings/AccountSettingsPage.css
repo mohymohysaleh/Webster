@@ -1,0 +1,114 @@
+.account-settings-page {
+    width: 100%;
+    height: 100%;
+    background-color: #121212;
+    padding: 24px;
+  }
+  
+  .account-settings-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+  
+  .account-settings-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .profile-photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-photo-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  
+  .profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .upload-photo-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #e61e32;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .upload-photo-button:hover {
+    background-color: #c91a2b;
+  }
+  
+  .hidden-file-input {
+    display: none;
+  }
+  
+  .photo-help-text {
+    color: #b3b3b3;
+    font-size: 14px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .form-group label {
+    font-size: 14px;
+    color: #b3b3b3;
+  }
+  
+  .form-control {
+    background-color: #282828;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .form-control:focus {
+    outline: 2px solid #e61e32;
+  }
+  
+  .save-button {
+    background-color: #e61e32;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 16px;
+  }
+  
+  .save-button:hover {
+    background-color: #c91a2b;
+  }
+  
