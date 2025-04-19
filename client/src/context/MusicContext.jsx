@@ -45,7 +45,7 @@ export function MusicProvider({ children }) {
 
   const fetchSongs = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/admin/songs', {
+      const response = await fetch('http://localhost:8000/api/songs', {
         method: 'GET',
         credentials: 'include',
         headers: {
