@@ -16,10 +16,11 @@ import PlaylistsPage from "./pages/playlists/PlaylistsPage";
 import PlaylistDetailPage from "./pages/playlists/PlaylistDetailPage";
 import SettingsPage from "./pages/settings/SettingsPage";
 import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
+import AdminPage from './pages/admin/AdminPage';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children, adminOnly = false }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -30,7 +31,15 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  return user ? children : <Navigate to="/login" />;
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+
+  if (adminOnly && user.role !== 'admin') {
+    return <Navigate to="/" />;
+  }
+
+  return children;
 };
 
 function AppRoutes() {
@@ -52,14 +61,81 @@ function AppRoutes() {
       <div className="main-content">
         <SettingsButton />
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/playlists" element={<PlaylistsPage />} />
-          <Route path="/playlist/:id" element={<PlaylistDetailPage />} />
-          <Route path="/likes" element={<LikesPage />} />
-          <Route path="/create-playlist" element={<CreatePlaylistPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-          <Route path="/account-settings" element={<AccountSettingsPage />} />
+          {/* Admin-only route */}
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute adminOnly>
+                <AdminPage />
+              </PrivateRoute>
+            }
+          />
+          
+          {/* Regular user routes */}
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <PrivateRoute>
+                <SearchPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/playlists"
+            element={
+              <PrivateRoute>
+                <PlaylistsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/playlist/:id"
+            element={
+              <PrivateRoute>
+                <PlaylistDetailPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/likes"
+            element={
+              <PrivateRoute>
+                <LikesPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/create-playlist"
+            element={
+              <PrivateRoute>
+                <CreatePlaylistPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <SettingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/account-settings"
+            element={
+              <PrivateRoute>
+                <AccountSettingsPage />
+              </PrivateRoute>
+            }
+          />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

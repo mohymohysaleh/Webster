@@ -2,9 +2,11 @@ import { Link, useLocation } from "react-router-dom"
 import { Home, Search, ListMusic, PlusCircle, Heart } from "lucide-react"
 import "./Sidebar.css"
 import Img1 from '../../assets/images/Webster.png'
+import { useAuth } from '../../contexts/AuthContext'
 
 export function Sidebar() {
   const location = useLocation()
+  const { user } = useAuth()
 
   return (
     <div className="sidebar bg-black border-end border-dark">
@@ -55,6 +57,28 @@ export function Sidebar() {
             <PlusCircle size={20} />
             <span>Create Playlist</span>
           </Link>
+
+          {user?.role === 'admin' && (
+            <Link
+              to="/admin"
+              className={`nav-link d-flex align-items-center gap-3 ${location.pathname === "/admin" ? "text-white" : "text-secondary"}`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg>
+              <span>Admin</span>
+            </Link>
+          )}
         </nav>
       </div>
     </div>

@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
-    trim: true,
-    lowercase: true
+    unique: true
   },
   google_sub: {
     type: String,
@@ -15,8 +14,7 @@ const userSchema = new mongoose.Schema({
   },
   name: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
   role: {
     type: String,
@@ -24,11 +22,11 @@ const userSchema = new mongoose.Schema({
     default: 'user'
   },
   likedSongs: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Music'
+    type: Schema.Types.ObjectId,
+    ref: 'Song'
   }],
   playlists: [{
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Playlist'
   }]
 }, {

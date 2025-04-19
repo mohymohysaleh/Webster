@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const playlistSchema = new mongoose.Schema({
+const playlistSchema = new Schema({
   name: {
     type: String,
     required: true
@@ -9,20 +10,23 @@ const playlistSchema = new mongoose.Schema({
     type: String
   },
   user: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
   songs: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Music'
+    type: Schema.Types.ObjectId,
+    ref: 'Song'
   }],
   isPublic: {
     type: Boolean,
-    default: true
+    default: false
   }
 }, {
   timestamps: true
 });
 
-module.exports = mongoose.model('Playlist', playlistSchema); 
+// Create a model from the schema and explicitly connect to the "playlists" collection
+const Playlist = mongoose.model('Playlist', playlistSchema, 'playlists');
+
+module.exports = Playlist; 

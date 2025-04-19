@@ -52,7 +52,7 @@ router.post('/google/callback', async (req, res) => {
     }
 
     const refreshToken = jwt.createRefreshToken({
-      user_id: user._id,
+      id: user._id,
       email: user.email,
       name: user.name,
       role: user.role,
@@ -84,7 +84,8 @@ router.post('/google/callback', async (req, res) => {
 
 router.get('/me', verifyRefreshToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.user_id);
+    console.log('User data in /me route:', req.user);
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }

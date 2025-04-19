@@ -1,0 +1,145 @@
+.admin-page {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.admin-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+
+.admin-section {
+  background: #282828;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.admin-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  color: #fff;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #404040;
+}
+
+.admin-table th {
+  background-color: #181818;
+  font-weight: 600;
+  color: #1db954;
+}
+
+.admin-table tr:hover {
+  background-color: #333;
+}
+
+.song-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.song-form input {
+  padding: 0.75rem;
+  background-color: #181818;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.song-form input:focus {
+  outline: none;
+  border-color: #1db954;
+  box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+}
+
+.song-form button,
+.action-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #1db954;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.song-form button:hover,
+.action-button:hover {
+  background-color: #1ed760;
+  transform: translateY(-1px);
+}
+
+.delete-button {
+  background-color: #e91429;
+  padding: 0.5rem 1rem;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+  background-color: #ff1e1e;
+}
+
+select {
+  padding: 0.5rem;
+  background-color: #181818;
+  border: 1px solid #404040;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+  border-color: #1db954;
+}
+
+.status-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.success {
+  background-color: rgba(29, 185, 84, 0.1);
+  color: #1db954;
+  border: 1px solid #1db954;
+}
+
+.error {
+  background-color: rgba(233, 20, 41, 0.1);
+  color: #e91429;
+  border: 1px solid #e91429;
+}
+
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+} 

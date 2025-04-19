@@ -1,0 +1,122 @@
+.song-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  color: #fff;
+}
+
+.song-card:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-card-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.song-card-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.song-number {
+  width: 20px;
+  color: #aaa;
+  font-size: 14px;
+  text-align: right;
+}
+
+.song-card:hover .song-number {
+  display: none;
+}
+
+.play-button {
+  display: none;
+  background: none;
+  border: none;
+  color: #1db954;
+  font-size: 24px;
+  cursor: pointer;
+  width: 20px;
+  padding: 0;
+  line-height: 1;
+}
+
+.song-card:hover .play-button {
+  display: block;
+}
+
+.song-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.song-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.song-name {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.song-artist {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.song-album {
+  flex: 1;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.song-duration {
+  font-size: 14px;
+  color: #aaa;
+  width: 60px;
+}
+
+.like-button {
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.like-button:hover {
+  transform: scale(1.1);
+}
+
+.like-button.liked {
+  color: #1db954;
+}
+
+.like-button .filled {
+  color: #1db954;
+}
+
+.heart-icon {
+  transition: color 0.2s ease;
+}
+
+.heart-icon:hover {
+  color: #1db954;
+} 

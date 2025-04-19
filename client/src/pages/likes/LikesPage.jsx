@@ -1,21 +1,29 @@
 "use client"
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePlaylist } from '../../contexts/PlaylistContext';
 import { useMusic } from '../../context/MusicContext';
 import { BsHeart, BsHeartFill, BsPlayFill } from 'react-icons/bs';
 import './LikesPage.css';
 
 const LikesPage = () => {
-  const { likedSongs, toggleLike, fetchLikedSongs } = usePlaylist();
+  const { likedSongs, toggleLike, fetchLikedSongs, isLiked } = usePlaylist();
   const { playSongById } = useMusic();
+  const [isLiking, setIsLiking] = useState(false);
 
   useEffect(() => {
     fetchLikedSongs();
   }, [fetchLikedSongs]);
 
-  const handleLike = async (songId) => {
-    await toggleLike(songId);
+  const handleLike = async (song) => {
+    if (!isLiking) {
+      try {
+        setIsLiking(true);
+        await toggleLike(song);
+      } finally {
+        setIsLiking(false);
+      }
+    }
   };
 
   const handlePlay = (songId) => {
@@ -87,7 +95,8 @@ const LikesPage = () => {
                 <td className="song-actions">
                   <button
                     className="like-button"
-                    onClick={() => handleLike(song._id)}
+                    onClick={() => handleLike(song)}
+                    disabled={isLiking}
                   >
                     <BsHeartFill className="heart-icon filled" />
                   </button>

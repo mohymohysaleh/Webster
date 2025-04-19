@@ -9,7 +9,7 @@ import "./MusicPlayer.css"
 export function MusicPlayer() {
   const audioRef = useRef(null)
   const { songs, currentIndex, isPlaying, togglePlay, skipNext, skipPrev } = useMusic()
-  const { likedSongs, toggleLike, fetchLikedSongs } = usePlaylist()
+  const { likedSongs, toggleLike, fetchLikedSongs, isLiked } = usePlaylist()
 
   const [progress, setProgress] = useState(0)
   const [volume, setVolume] = useState(75)
@@ -17,7 +17,6 @@ export function MusicPlayer() {
 
   const currentSong = songs[currentIndex] || {}
   const duration = Number(currentSong.duration) || 0
-  const isFavorite = likedSongs?.some(song => song._id === currentSong._id)
 
   useEffect(() => {
     // Fetch liked songs when component mounts
@@ -89,11 +88,11 @@ export function MusicPlayer() {
               <div className="small text-secondary">{currentSong.artist || ""}</div>
             </div>
             <button
-              className={`btn btn-link p-0 ms-2 ${isFavorite ? "text-danger" : "text-secondary"}`}
+              className={`btn btn-link p-0 ms-2 ${isLiked(currentSong._id) ? "text-danger" : "text-secondary"}`}
               onClick={handleLike}
               disabled={isLiking || !currentSong._id}
             >
-              <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
+              <Heart size={16} fill={isLiked(currentSong._id) ? "currentColor" : "none"} />
             </button>
           </div>
 

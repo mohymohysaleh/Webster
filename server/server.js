@@ -8,6 +8,9 @@
 
 const app = require('./app');
 const { getMusicData } = require('./controllers/mediaController');
+const authRoutes = require('./routes/auth');
+const playlistRoutes = require('./routes/playlist');
+const adminRoutes = require('./routes/admin');
 
 const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, async () => {
@@ -22,6 +25,11 @@ const server = app.listen(PORT, async () => {
     console.error('Error inserting initial data:', error);
   }
 });
+
+// Routes
+app.use('/auth', authRoutes);
+app.use('/api/playlists', playlistRoutes);
+app.use('/api/admin', adminRoutes);
 
 process.on('SIGINT', () => {
   server.close(() => {
