@@ -8,7 +8,6 @@ export function MusicProvider({ children }) {
   const [songs, setSongs] = useState([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -47,9 +46,6 @@ export function MusicProvider({ children }) {
   // Toggle play/pause
   const togglePlay = () => setIsPlaying(!isPlaying)
 
-  // Toggle favorite status
-  const toggleFavorite = () => setIsFavorite(!isFavorite)
-
   return (
     <MusicContext.Provider
       value={{
@@ -59,14 +55,11 @@ export function MusicProvider({ children }) {
         setCurrentIndex,
         isPlaying,
         setIsPlaying,
-        isFavorite,
-        setIsFavorite,
         playSong,
         playSongById,
         skipNext,
         skipPrev,
         togglePlay,
-        toggleFavorite,
         user,
         setUser,
       }}
@@ -76,10 +69,9 @@ export function MusicProvider({ children }) {
   )
 }
 
-// Custom hook to use the music context
-export function useMusic() {
+export const useMusic = () => {
   const context = useContext(MusicContext)
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useMusic must be used within a MusicProvider")
   }
   return context

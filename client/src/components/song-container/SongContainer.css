@@ -3,7 +3,7 @@
   color: white;
   background-color: transparent;
   margin-top: 16px;
-  padding-bottom: 80px; /* Add padding to ensure last song is visible above music player */
+  padding-bottom: 80px;
 }
 
 .song-table {
@@ -93,7 +93,7 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
   .song-album,
   .song-date {

@@ -3,17 +3,26 @@
 import { useRef, useEffect, useState } from "react"
 import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Volume2, Heart } from "lucide-react"
 import { useMusic } from "../../context/MusicContext"
+import { usePlaylist } from "../../contexts/PlaylistContext"
 import "./MusicPlayer.css"
 
 export function MusicPlayer() {
   const audioRef = useRef(null)
-  const { songs, currentIndex, isPlaying, isFavorite, togglePlay, skipNext, skipPrev, toggleFavorite } = useMusic()
+  const { songs, currentIndex, isPlaying, togglePlay, skipNext, skipPrev } = useMusic()
+  const { likedSongs, toggleLike, fetchLikedSongs } = usePlaylist()
 
   const [progress, setProgress] = useState(0)
   const [volume, setVolume] = useState(75)
+  const [isLiking, setIsLiking] = useState(false)
 
   const currentSong = songs[currentIndex] || {}
   const duration = Number(currentSong.duration) || 0
+  const isFavorite = likedSongs?.some(song => song._id === currentSong._id)
+
+  useEffect(() => {
+    // Fetch liked songs when component mounts
+    fetchLikedSongs()
+  }, [fetchLikedSongs])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -47,6 +56,17 @@ export function MusicPlayer() {
     return `${mins}:${secs.toString().padStart(2, "0")}`
   }
 
+  const handleLike = async () => {
+    if (currentSong._id && !isLiking) {
+      try {
+        setIsLiking(true)
+        await toggleLike(currentSong)
+      } finally {
+        setIsLiking(false)
+      }
+    }
+  }
+
   return (
     <div className="fixed-bottom bg-black border-top border-dark music-player">
       {currentSong.audio && (
@@ -70,7 +90,8 @@ export function MusicPlayer() {
             </div>
             <button
               className={`btn btn-link p-0 ms-2 ${isFavorite ? "text-danger" : "text-secondary"}`}
-              onClick={toggleFavorite}
+              onClick={handleLike}
+              disabled={isLiking || !currentSong._id}
             >
               <Heart size={16} fill={isFavorite ? "currentColor" : "none"} />
             </button>

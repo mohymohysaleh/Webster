@@ -17,7 +17,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const fetchPlaylists = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/playlists/my-playlists', {
+      const response = await fetch('http://localhost:5000/api/playlists/my-playlists', {
         credentials: 'include'
       });
       if (response.ok) {
@@ -31,7 +31,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const fetchLikedSongs = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/playlists/liked-songs', {
+      const response = await fetch('http://localhost:5000/api/playlists/liked-songs', {
         credentials: 'include'
       });
       if (response.ok) {
@@ -45,7 +45,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const createPlaylist = async (name, description) => {
     try {
-      const response = await fetch('http://localhost:8000/api/playlists/create', {
+      const response = await fetch('http://localhost:5000/api/playlists/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -65,7 +65,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const addToPlaylist = async (playlistId, songId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/playlists/${playlistId}/add-song`, {
+      const response = await fetch(`http://localhost:5000/api/playlists/${playlistId}/add-song`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const removeFromPlaylist = async (playlistId, songId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/playlists/${playlistId}/remove-song/${songId}`, {
+      const response = await fetch(`http://localhost:5000/api/playlists/${playlistId}/remove-song/${songId}`, {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -105,18 +105,31 @@ export const PlaylistProvider = ({ children }) => {
     }
   };
 
-  const toggleLike = async (songId) => {
+  const toggleLike = async (song) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/playlists/toggle-like/${songId}`, {
+      // Optimistically update the UI
+      const isCurrentlyLiked = likedSongs.some(s => s._id === song._id);
+      if (isCurrentlyLiked) {
+        setLikedSongs(prev => prev.filter(s => s._id !== song._id));
+      } else {
+        setLikedSongs(prev => [...prev, song]);
+      }
+
+      // Make the API call
+      const response = await fetch(`http://localhost:5000/api/playlists/toggle-like/${song._id}`, {
         method: 'POST',
         credentials: 'include'
       });
-      if (response.ok) {
-        const { likedSongs: updatedLikes } = await response.json();
-        setLikedSongs(updatedLikes);
+      
+      if (!response.ok) {
+        // If the API call fails, revert the optimistic update
+        await fetchLikedSongs();
+        throw new Error('Failed to toggle like');
       }
     } catch (error) {
       console.error('Error toggling like:', error);
+      // Revert optimistic update on error
+      await fetchLikedSongs();
     }
   };
 

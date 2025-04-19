@@ -65,7 +65,8 @@ router.post('/:playlistId/add-song', verifyRefreshToken, async (req, res) => {
       await playlist.save();
     }
 
-    res.json(playlist);
+    const populatedPlaylist = await playlist.populate('songs');
+    res.json(populatedPlaylist);
   } catch (err) {
     console.error('Error adding song to playlist:', err);
     res.status(500).json({ error: 'Failed to add song to playlist' });
@@ -88,7 +89,8 @@ router.delete('/:playlistId/remove-song/:songId', verifyRefreshToken, async (req
     playlist.songs = playlist.songs.filter(songId => songId.toString() !== req.params.songId);
     await playlist.save();
 
-    res.json(playlist);
+    const populatedPlaylist = await playlist.populate('songs');
+    res.json(populatedPlaylist);
   } catch (err) {
     console.error('Error removing song from playlist:', err);
     res.status(500).json({ error: 'Failed to remove song from playlist' });
@@ -98,10 +100,17 @@ router.delete('/:playlistId/remove-song/:songId', verifyRefreshToken, async (req
 // Like/unlike a song
 router.post('/toggle-like/:songId', verifyRefreshToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
     const songId = req.params.songId;
+    
+    // First check if the song exists
+    const song = await Music.findById(songId);
+    if (!song) {
+      return res.status(404).json({ error: 'Song not found' });
+    }
 
+    const user = await User.findById(req.user.id);
     const songIndex = user.likedSongs.indexOf(songId);
+    
     if (songIndex === -1) {
       user.likedSongs.push(songId);
     } else {
@@ -109,7 +118,10 @@ router.post('/toggle-like/:songId', verifyRefreshToken, async (req, res) => {
     }
 
     await user.save();
-    res.json({ likedSongs: user.likedSongs });
+    
+    // Fetch the updated user with populated liked songs
+    const updatedUser = await User.findById(req.user.id).populate('likedSongs');
+    res.json({ likedSongs: updatedUser.likedSongs });
   } catch (err) {
     console.error('Error toggling like:', err);
     res.status(500).json({ error: 'Failed to toggle like' });

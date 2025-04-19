@@ -1,6 +1,6 @@
 .music-player {
   height: 70px;
-  width: 100vw; /* Full viewport width */
+  width: 100vw; 
   position: fixed;
   bottom: 0;
   left: 0;
@@ -19,19 +19,19 @@
   padding: 0 16px;
 }
 
-/* Ensure the player row takes full width */
+
 .music-player .row {
   width: 100%;
   margin: 0;
 }
 
-/* Make sure columns have proper sizing */
+
 .music-player .col-3,
 .music-player .col-6 {
   padding: 0 8px;
 }
 
-/* Ensure progress bar displays properly */
+
 .music-player .progress {
   width: 100%;
 }

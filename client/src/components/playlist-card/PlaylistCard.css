@@ -1,7 +1,7 @@
 .playlist-card {
   transition: background-color 0.2s;
   cursor: pointer;
-  width: 100%; /* Ensure full width */
+  width: 100%; 
   display: flex;
   align-items: center;
 }
