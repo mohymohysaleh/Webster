@@ -1,19 +1,27 @@
 const mongoose = require('mongoose');
-
-Mongo_Uri = 'mongodb://127.0.0.1:27017/Webster';
+require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(Mongo_Uri, {
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
     });
-    console.log('MongoDB connected');
+    console.log('MongoDB connected successfully');
+
+    // Handle connection events
+    mongoose.connection.on('error', err => {
+      console.error('MongoDB connection error:', err);
+    });
+
+    mongoose.connection.on('disconnected', () => {
+      console.log('MongoDB disconnected');
+    });
+
   } catch (err) {
-    console.error('MongoDB connection error:', err.message);
+    console.error('MongoDB connection failed:', err.message);
     process.exit(1);
   }
 };
 
-connectDB();
 module.exports = connectDB;

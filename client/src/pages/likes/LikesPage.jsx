@@ -1,88 +1,53 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Heart } from "lucide-react"
-import { useMusic } from "../../context/MusicContext"
-import "./LikesPage.css"
+import { useEffect } from 'react';
+import { usePlaylist } from '../../contexts/PlaylistContext';
+import { BsHeart, BsHeartFill } from 'react-icons/bs';
+import './LikesPage.css';
 
-export default function LikesPage() {
-  const [likedSongs, setLikedSongs] = useState([])
-  const { songs, playSong } = useMusic()
+const LikesPage = () => {
+  const { likedSongs, toggleLike, fetchLikedSongs } = usePlaylist();
 
   useEffect(() => {
-    // Get 8 random songs from the database to simulate liked songs
-    if (songs.length > 0) {
-      const shuffled = [...songs].sort(() => 0.5 - Math.random())
-      const selected = shuffled.slice(0, 8)
-      setLikedSongs(selected)
-    }
-  }, [songs])
+    fetchLikedSongs();
+  }, [fetchLikedSongs]);
 
-  const handleSongClick = (song) => {
-    // Find the index of this song in the main songs array
-    const songIndex = songs.findIndex((s) => s._id === song._id)
+  const handleLike = async (songId) => {
+    await toggleLike(songId);
+  };
 
-    if (songIndex !== -1) {
-      playSong(songIndex)
-    }
+  if (!likedSongs || likedSongs.length === 0) {
+    return (
+      <div className="likes-empty-state">
+        <BsHeart className="empty-heart-icon" />
+        <h2>You have no liked songs</h2>
+        <p>Start liking songs to build your collection</p>
+      </div>
+    );
   }
 
   return (
     <div className="likes-page">
-      {/* Header with gradient background */}
-      <div className="likes-header">
-        <div className="likes-header-content">
-          <div className="likes-icon-container">
-            <Heart size={64} className="text-white" />
-          </div>
-          <div className="likes-title-container">
-            <h1 className="likes-title">Liked Songs</h1>
-            <div className="user-info">
-              <div className="profile-image">
-                <img src="/placeholder.svg?height=24&width=24" alt="Profile" />
-              </div>
-              <span className="username">KareemAdel</span>
-              <span className="song-count">• {likedSongs.length} songs</span>
+      <h1>Liked Songs</h1>
+      <div className="songs-list">
+        {likedSongs.map((song) => (
+          <div key={song._id} className="song-item">
+            <img src={song.image} alt={song.name} className="song-image" />
+            <div className="song-info">
+              <h3>{song.name}</h3>
+              <p>{song.artist}</p>
             </div>
+            <button
+              className="like-button"
+              onClick={() => handleLike(song._id)}
+            >
+              <BsHeartFill className="heart-icon filled" />
+            </button>
           </div>
-        </div>
-      </div>
-
-      {/* Song list */}
-      <div className="likes-content">
-        <table className="song-table">
-          <thead>
-            <tr>
-              <th className="song-number">#</th>
-              <th className="song-title">TITLE</th>
-              <th className="song-album">ALBUM</th>
-              <th className="song-date">DATE ADDED</th>
-              <th className="song-duration">⏱️</th>
-            </tr>
-          </thead>
-          <tbody>
-            {likedSongs.map((song, index) => (
-              <tr key={song._id || index} className="song-row" onClick={() => handleSongClick(song)}>
-                <td className="song-number">{index + 1}</td>
-                <td className="song-title">
-                  <div className="song-info">
-                    <div className="song-image">
-                      <img src={song.image || "/placeholder.svg?height=40&width=40"} alt={song.name} />
-                    </div>
-                    <div className="song-details">
-                      <div className="song-name">{song.name}</div>
-                      <div className="song-artist">{song.artist}</div>
-                    </div>
-                  </div>
-                </td>
-                <td className="song-album">{song.album}</td>
-                <td className="song-date">Today</td>
-                <td className="song-duration">{song.duration}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        ))}
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default LikesPage;

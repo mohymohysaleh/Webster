@@ -2,39 +2,42 @@
 
 import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
-import { useMusic } from "../../context/MusicContext"
+import { useAuth } from "../../contexts/AuthContext"
 import { ArrowLeft, Upload } from "lucide-react"
 import "./AccountSettingsPage.css"
 
 export default function AccountSettingsPage() {
   const navigate = useNavigate()
-  const { user, setUser } = useMusic()
-  const [name, setName] = useState(user?.name || "")
+  const { user, updateProfile } = useAuth()
+  const [name, setName] = useState(user?.displayName || "")
+  const [isLoading, setIsLoading] = useState(false)
   const fileInputRef = useRef(null)
 
-  const handleSave = () => {
-    if (user) {
-      setUser({
-        ...user,
-        name,
-      })
+  const handleSave = async () => {
+    try {
+      setIsLoading(true)
+      await updateProfile({ displayName: name })
+      navigate("/settings")
+    } catch (error) {
+      console.error("Failed to update profile:", error)
+      alert("Failed to update profile. Please try again.")
+    } finally {
+      setIsLoading(false)
     }
-    navigate("/settings")
   }
 
-  const handlePhotoUpload = (e) => {
+  const handlePhotoUpload = async (e) => {
     const file = e.target.files[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        if (user) {
-          setUser({
-            ...user,
-            photoURL: event.target.result,
-          })
-        }
+      try {
+        setIsLoading(true)
+        await updateProfile({ photoFile: file })
+      } catch (error) {
+        console.error("Failed to upload photo:", error)
+        alert("Failed to upload photo. Please try again.")
+      } finally {
+        setIsLoading(false)
       }
-      reader.readAsDataURL(file)
     }
   }
 
@@ -55,11 +58,15 @@ export default function AccountSettingsPage() {
         <div className="profile-photo-section">
           <div className="profile-photo-container">
             <img
-              src={user?.photoURL || "/placeholder.svg?height=120&width=120"}
+              src={user?.photoURL || "/placeholder.svg"}
               alt="Profile"
               className="profile-photo"
             />
-            <button className="upload-photo-button" onClick={triggerFileInput}>
+            <button 
+              className="upload-photo-button" 
+              onClick={triggerFileInput}
+              disabled={isLoading}
+            >
               <Upload size={20} />
             </button>
             <input
@@ -81,11 +88,16 @@ export default function AccountSettingsPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="form-control"
+            disabled={isLoading}
           />
         </div>
 
-        <button className="save-button" onClick={handleSave}>
-          Save Changes
+        <button 
+          className="save-button" 
+          onClick={handleSave}
+          disabled={isLoading}
+        >
+          {isLoading ? "Saving..." : "Save Changes"}
         </button>
       </div>
     </div>
