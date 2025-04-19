@@ -68,7 +68,7 @@ const LikesPage = () => {
                     className="play-button"
                     onClick={() => handlePlay(song._id)}
                   >
-                    <BsPlayFill />
+                    <BsPlayFill  />
                   </button>
                 </td>
                 <td className="song-title">

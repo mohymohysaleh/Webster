@@ -1,5 +1,6 @@
 import { useAuth } from '../contexts/AuthContext';
 import websterLogo from '../assets/images/Webster.png';
+import googleLogo from '../assets/images/google.png';
 
 const Login = () => {
   const { login } = useAuth();
@@ -9,7 +10,7 @@ const Login = () => {
       <div className="login-content">
         <img src={websterLogo} alt="Webster Logo" className="logo" />
         <button className="google-btn" onClick={login}>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google Logo" />
+          <img src={googleLogo} alt="Google Logo" />
           Sign in with Google
         </button>
       </div>
