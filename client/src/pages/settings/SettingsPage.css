@@ -29,6 +29,7 @@
     transition: background-color 0.2s;
     width: 100%;
     text-align: left;
+    position: relative;
   }
   
   .settings-button:hover {
@@ -53,5 +54,19 @@
   
   .settings-button span {
     flex: 1;
+  }
+  
+  .user-name {
+    position: absolute;
+    right: 1rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.25rem 0.75rem;
+    border-radius: 16px;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   

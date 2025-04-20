@@ -3,6 +3,9 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { PlaylistProvider } from './contexts/PlaylistContext';
 import { MusicProvider } from "./context/MusicContext";
 import { useMusic } from "./context/MusicContext";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+
 import Login from './components/Login';
 import GoogleCallback from './components/GoogleCallback';
 import { MusicPlayer } from "./components/music-player/MusicPlayer";
@@ -146,15 +149,27 @@ function AppRoutes() {
 
 function App() {
   return (
-    <AuthProvider>
-      <PlaylistProvider>
-        <MusicProvider>
-          <Router>
+    <Router>
+      <AuthProvider>
+        <PlaylistProvider>
+          <MusicProvider>
             <AppRoutes />
-          </Router>
-        </MusicProvider>
-      </PlaylistProvider>
-    </AuthProvider>
+            <ToastContainer 
+              position="bottom-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
+          </MusicProvider>
+        </PlaylistProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 

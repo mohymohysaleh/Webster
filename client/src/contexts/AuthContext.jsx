@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
@@ -74,6 +75,60 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Delete the current user's account
+  const deleteAccount = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/playlists/delete-account', {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+      }
+      
+      toast.success('Account deleted successfully');
+      setUser(null);
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      toast.error('Failed to delete account');
+      throw error;
+    }
+  };
+
+  // Update user profile information
+  const updateProfile = async (userData) => {
+    try {
+      const response = await fetch('http://localhost:8000/auth/update-profile', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      });
+      
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error);
+      }
+      
+      const updatedUser = await response.json();
+      setUser({...user, ...updatedUser.user});
+      toast.success('Profile updated successfully');
+      return updatedUser.user;
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Failed to update profile');
+      throw error;
+    }
+  };
+
   const getAllUsers = async () => {
     try {
       const response = await fetch('http://localhost:8000/api/admin/users', {
@@ -143,7 +198,9 @@ export const AuthProvider = ({ children }) => {
         setUser,
         getAllUsers,
         updateUserRole,
-        deleteUser
+        deleteUser,
+        deleteAccount,
+        updateProfile
       }}
     >
       {children}

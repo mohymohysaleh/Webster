@@ -46,7 +46,7 @@ const customFetch = async (url, options = {}) => {
     // Special handling for 401/403 errors
     if (error.status === 401 || error.status === 403) {
       console.warn('Authentication error. User may need to log in again.');
-      // You could redirect to login page or display a notification here
+      
     }
     
     throw error;

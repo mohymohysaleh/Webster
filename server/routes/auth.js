@@ -103,6 +103,64 @@ router.get('/me', verifyRefreshToken, async (req, res) => {
   }
 });
 
+// Update user profile
+router.patch('/update-profile', verifyRefreshToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name } = req.body;
+    
+    // Validate input
+    if (name && (typeof name !== 'string' || name.length < 1)) {
+      return res.status(400).json({ error: 'Name must be a valid string' });
+    }
+    
+    // Find and update the user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Update fields if provided
+    if (name) {
+      user.name = name;
+    }
+    
+    // Save the updated user
+    await user.save();
+    
+    // Generate new token with updated information
+    const refreshToken = jwt.createRefreshToken({
+      id: user._id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      sub: user.google_sub
+    });
+
+    // Update the cookie
+    res.cookie('refresh_token', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Lax',
+      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+    });
+    
+    // Return the updated user
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role
+      }
+    });
+  } catch (err) {
+    console.error('Error updating profile:', err);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
 router.post('/logout', (req, res) => {
   res.clearCookie('refresh_token', {
     httpOnly: true,
