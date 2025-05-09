@@ -1,0 +1,70 @@
+.create-playlist-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.create-playlist-form {
+  background: #181818;
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  min-width: 320px;
+  max-width: 400px;
+}
+
+.create-playlist-form h2 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.create-playlist-form input,
+.create-playlist-form textarea {
+  background: #222;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.create-playlist-form input:focus,
+.create-playlist-form textarea:focus {
+  border: 1.5px solid #1db954;
+}
+
+.create-playlist-form button {
+  background: #1db954;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.create-playlist-form button:disabled {
+  background: #444;
+  cursor: not-allowed;
+}
+
+.success-message {
+  color: #1db954;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.error-message {
+  color: #ff4d4f;
+  text-align: center;
+  font-size: 1rem;
+} 

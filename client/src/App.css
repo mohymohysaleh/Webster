@@ -14,6 +14,8 @@ body {
   overflow: hidden;
   width: 100vw;
   height: 100vh;
+  position: relative;
+  min-height: 100vh;
 }
 
 /* Custom scrollbar */
@@ -37,8 +39,9 @@ body {
 /* Main content area */
 .main-content {
   flex: 1;
+  padding: 2rem;
+  padding-bottom: 100px; /* Add space for the music player */
   overflow-y: auto;
-  padding: 20px;
   position: relative;
 }
 

@@ -1,55 +1,30 @@
+import { useEffect, useState } from 'react';
 import { PlaylistCard } from "../../components/playlist-card/PlaylistCard"
 import { TopMixCard } from "../../components/top-mix-card/TopMixCard"
-import Img1 from '../../assets/images/daily.jpg'
-import Img2 from '../../assets/images/afr.jpg'
-export default function HomePage() {
-  // Playlist IDs for navigation
-  const featuredPlaylists = [
-    { id: "chill-mix", title: "Chill Mix", image: Img1 },
-    { id: "pop-mix", title: "Pop Mix", image: "/placeholder.svg?height=48&width=48" },
-    { id: "daily-mix-1", title: "Daily Mix 1", image: Img1 },
-    { id: "daily-mix-2", title: "Daily Mix 2", image: Img2 },
-    { id: "folk-acoustic", title: "Folk & Acoustic Mix", image: "/placeholder.svg?height=48&width=48" },
-    { id: "daily-mix-4", title: "Daily Mix 4", image: "/placeholder.svg?height=48&width=48" },
-  ]
+import { usePlaylist } from '../../contexts/PlaylistContext';
+import { useNavigate } from 'react-router-dom';
 
-  const topMixes = [
-    {
-      id: "chill-mix",
-      title: "Chill Mix",
-      artists: "Julia Wolf, Khalid, ayokay and more",
-      image: "/placeholder.svg?height=200&width=200",
-      color: "yellow",
-    },
-    {
-      id: "pop-mix",
-      title: "Pop Mix",
-      artists: "Hey Violet, VERITE, Timeflies and more",
-      image: "/placeholder.svg?height=200&width=200",
-      color: "pink",
-    },
-    {
-      id: "pheelz-mix",
-      title: "Pheelz Mix",
-      artists: "WizKid, Asake, Tiwa Savage and more",
-      image: "/placeholder.svg?height=200&width=200",
-      color: "green",
-    },
-    {
-      id: "indie-mix",
-      title: "Indie Mix",
-      artists: "Joywave, The xx, The Neighbourhood and more",
-      image: "/placeholder.svg?height=200&width=200",
-      color: "red",
-    },
-    {
-      id: "daily-mix-1",
-      title: "Daily Mix 1",
-      artists: "Ayra Starr, Lil Kesh, Ed Sheeran and more",
-      image: "/placeholder.svg?height=200&width=200",
-      color: "teal",
-    },
-  ]
+export default function HomePage() {
+  const { playlists, fetchPlaylists } = usePlaylist();
+  const [genres, setGenres] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchPlaylists();
+  }, [fetchPlaylists]);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/genres')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setGenres(data)
+        else setGenres([])
+      })
+      .catch(() => setGenres([]));
+  }, []);
+
+  // You can keep topMixes as mock or update to use real data if available
+  const topMixes = [];
 
   return (
     <>
@@ -59,9 +34,9 @@ export default function HomePage() {
 
         {/* Featured playlists grid */}
         <div className="row g-3 mb-4">
-          {featuredPlaylists.map((playlist) => (
-            <div key={playlist.id} className="col-12 col-md-6 col-lg-4">
-              <PlaylistCard id={playlist.id} title={playlist.title} image={playlist.image} />
+          {playlists.slice(0, 6).map((playlist) => (
+            <div key={playlist._id} className="col-12 col-md-6 col-lg-4">
+              <PlaylistCard id={playlist._id} title={playlist.name} coverImage={playlist.coverImage} description={playlist.description} />
             </div>
           ))}
         </div>
@@ -70,14 +45,17 @@ export default function HomePage() {
       {/* Top mixes section */}
       <div className="p-4 bg-black">
         <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 className="h4 fw-semibold mb-0">Your top mixes</h2>
-          <button className="btn btn-link text-secondary p-0 small">SEE ALL</button>
+          <h2 className="h4 fw-semibold mb-0">Top Mixes</h2>
         </div>
 
+        {/* Genres grid */}
         <div className="row g-4">
-          {topMixes.map((mix) => (
-            <div key={mix.id} className="col-6 col-md-4 col-lg-2">
-              <TopMixCard id={mix.id} title={mix.title} artists={mix.artists} image={mix.image} color={mix.color} />
+          {genres.map((genre) => (
+            <div key={genre._id} className="col-6 col-md-4 col-lg-2">
+              <div className="card genre-card top-genre-card" style={{ cursor: 'pointer', '--card-color': '#222' }} onClick={() => navigate(`/genre/${genre._id}`)}>
+                <h3 className="card-title genre-name">{genre.name}</h3>
+                <img src={genre.coverImage || "/placeholder.svg"} alt={genre.name} className="genre-card-image" />
+              </div>
             </div>
           ))}
         </div>

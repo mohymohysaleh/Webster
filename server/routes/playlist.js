@@ -27,7 +27,8 @@ router.post('/create', verifyRefreshToken, async (req, res) => {
       name,
       description,
       user: req.user.id,
-      isPublic
+      isPublic,
+      coverImage: '/placeholder.svg' // Default image until songs are added
     });
 
     // Add playlist to user's playlists
@@ -63,9 +64,17 @@ router.post('/:playlistId/add-song', verifyRefreshToken, async (req, res) => {
 
     if (!playlist.songs.includes(songId)) {
       playlist.songs.push(songId);
-      await playlist.save();
     }
 
+    // Always set coverImage to the first song's image if available
+    if (playlist.songs.length > 0) {
+      const firstSong = await Song.findById(playlist.songs[0]);
+      playlist.coverImage = firstSong && firstSong.image ? firstSong.image : '/placeholder.svg';
+    } else {
+      playlist.coverImage = '/placeholder.svg';
+    }
+
+    await playlist.save();
     const populatedPlaylist = await playlist.populate('songs');
     res.json(populatedPlaylist);
   } catch (err) {
@@ -88,8 +97,16 @@ router.delete('/:playlistId/remove-song/:songId', verifyRefreshToken, async (req
     }
 
     playlist.songs = playlist.songs.filter(songId => songId.toString() !== req.params.songId);
-    await playlist.save();
 
+    // Always set coverImage to the first song's image if available
+    if (playlist.songs.length > 0) {
+      const firstSong = await Song.findById(playlist.songs[0]);
+      playlist.coverImage = firstSong && firstSong.image ? firstSong.image : '/placeholder.svg';
+    } else {
+      playlist.coverImage = '/placeholder.svg';
+    }
+
+    await playlist.save();
     const populatedPlaylist = await playlist.populate('songs');
     res.json(populatedPlaylist);
   } catch (err) {
@@ -313,6 +330,90 @@ router.delete('/delete-account', verifyRefreshToken, async (req, res) => {
   } catch (err) {
     console.error('Error deleting account:', err);
     res.status(500).json({ error: 'Failed to delete account' });
+  }
+});
+
+// Get a single playlist by ID
+router.get('/:playlistId', verifyRefreshToken, async (req, res) => {
+  try {
+    const playlist = await Playlist.findById(req.params.playlistId)
+      .populate('songs')
+      .populate('user', 'name email');
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+    res.json(playlist);
+  } catch (err) {
+    console.error('Error fetching playlist:', err);
+    res.status(500).json({ error: 'Failed to fetch playlist' });
+  }
+});
+
+// Delete a playlist by ID
+router.delete('/:playlistId', verifyRefreshToken, async (req, res) => {
+  try {
+    const playlist = await Playlist.findById(req.params.playlistId);
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+    if (playlist.user.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+    await playlist.deleteOne();
+    res.json({ message: 'Playlist deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting playlist:', err);
+    res.status(500).json({ error: 'Failed to delete playlist' });
+  }
+});
+
+// Reorder songs in a playlist
+router.post('/:playlistId/reorder-songs', verifyRefreshToken, async (req, res) => {
+  try {
+    const { songIds } = req.body;
+    const playlist = await Playlist.findById(req.params.playlistId);
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+    if (playlist.user.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+    // Only keep valid song IDs that are already in the playlist
+    playlist.songs = songIds.filter(id => playlist.songs.map(s => s.toString()).includes(id));
+    // Update cover image if needed
+    if (playlist.songs.length > 0) {
+      const firstSong = await Song.findById(playlist.songs[0]);
+      playlist.coverImage = firstSong && firstSong.image ? firstSong.image : '/placeholder.svg';
+    } else {
+      playlist.coverImage = '/placeholder.svg';
+    }
+    await playlist.save();
+    const populatedPlaylist = await playlist.populate('songs');
+    res.json(populatedPlaylist);
+  } catch (err) {
+    console.error('Error reordering songs:', err);
+    res.status(500).json({ error: 'Failed to reorder songs' });
+  }
+});
+
+// Rename a playlist
+router.patch('/:playlistId/rename', verifyRefreshToken, async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const playlist = await Playlist.findById(req.params.playlistId);
+    if (!playlist) {
+      return res.status(404).json({ error: 'Playlist not found' });
+    }
+    if (playlist.user.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Not authorized' });
+    }
+    playlist.name = name;
+    playlist.description = description;
+    await playlist.save();
+    res.json(playlist);
+  } catch (err) {
+    console.error('Error renaming playlist:', err);
+    res.status(500).json({ error: 'Failed to rename playlist' });
   }
 });
 

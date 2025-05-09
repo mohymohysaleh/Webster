@@ -3,7 +3,7 @@
 import { useNavigate } from "react-router-dom"
 import "./PlaylistCard.css"
 
-export function PlaylistCard({ id, title, image, description }) {
+export function PlaylistCard({ id, title, coverImage, description }) {
   const navigate = useNavigate()
 
   const handleClick = () => {
@@ -14,7 +14,7 @@ export function PlaylistCard({ id, title, image, description }) {
     <div className="playlist-card" onClick={handleClick}>
       <div className="playlist-card-content">
         <div className="playlist-card-image">
-          <img src={image || "/placeholder.svg"} alt={title} />
+          <img src={coverImage || "/placeholder.svg"} alt={title} />
         </div>
         <div className="playlist-card-info">
           <div className="playlist-card-title">{title}</div>

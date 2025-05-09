@@ -1,15 +1,21 @@
 "use client"
 
 import { useRef, useEffect, useState } from "react"
-import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Volume2, Heart } from "lucide-react"
+import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Volume2, Heart, Plus } from "lucide-react"
 import { useMusic } from "../../context/MusicContext"
 import { usePlaylist } from "../../contexts/PlaylistContext"
+import { useAuth } from "../../contexts/AuthContext"
+import { AddToPlaylistModal } from "./AddToPlaylistModal/AddToPlaylistModal"
 import "./MusicPlayer.css"
+import { useLocation } from 'react-router-dom'
 
-export function MusicPlayer() {
+export function MusicPlayer({ onSongAdded }) {
   const audioRef = useRef(null)
   const { songs, currentIndex, isPlaying, togglePlay, skipNext, skipPrev } = useMusic()
   const { likedSongs, toggleLike, fetchLikedSongs, isLiked } = usePlaylist()
+  const { user } = useAuth()
+  const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false)
+  const location = useLocation()
 
   const [progress, setProgress] = useState(0)
   const [volume, setVolume] = useState(75)
@@ -19,9 +25,10 @@ export function MusicPlayer() {
   const duration = Number(currentSong.duration) || 0
 
   useEffect(() => {
-    // Fetch liked songs when component mounts
-    fetchLikedSongs()
-  }, [fetchLikedSongs])
+    if (user) {
+      fetchLikedSongs()
+    }
+  }, [user, fetchLikedSongs])
 
   useEffect(() => {
     const audio = audioRef.current
@@ -66,6 +73,10 @@ export function MusicPlayer() {
     }
   }
 
+  const handleSongAdded = (playlistId) => {
+    if (onSongAdded) onSongAdded(playlistId);
+  }
+
   return (
     <div className="fixed-bottom bg-black border-top border-dark music-player">
       {currentSong.audio && (
@@ -93,6 +104,13 @@ export function MusicPlayer() {
               disabled={isLiking || !currentSong._id}
             >
               <Heart size={16} fill={isLiked(currentSong._id) ? "currentColor" : "none"} />
+            </button>
+            <button
+              className="btn btn-link p-0 ms-2 text-secondary"
+              onClick={() => setIsAddToPlaylistModalOpen(true)}
+              disabled={!currentSong._id}
+            >
+              <Plus size={16} />
             </button>
           </div>
 
@@ -159,6 +177,13 @@ export function MusicPlayer() {
           </div>
         </div>
       </div>
+
+      <AddToPlaylistModal
+        isOpen={isAddToPlaylistModalOpen}
+        onClose={() => setIsAddToPlaylistModalOpen(false)}
+        song={currentSong}
+        onSongAdded={handleSongAdded}
+      />
     </div>
   )
 }

@@ -1,55 +1,21 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useCallback } from "react"
 import { PlaylistCard } from "../../components/playlist-card/PlaylistCard"
+import { usePlaylist } from '../../contexts/PlaylistContext';
 import "./PlaylistsPage.css"
 
 export default function PlaylistsPage() {
-  const [playlists, setPlaylists] = useState([])
+  const { playlists, fetchPlaylists } = usePlaylist();
 
   useEffect(() => {
-    // Mock playlists data
-    const mockPlaylists = [
-      {
-        id: "chill-mix",
-        title: "Chill Mix",
-        description: "Relaxing tunes to unwind",
-        image: "/placeholder.svg?height=48&width=48",
-      },
-      {
-        id: "pop-mix",
-        title: "Pop Mix",
-        description: "Today's top pop hits",
-        image: "/placeholder.svg?height=48&width=48",
-      },
-      {
-        id: "indie-mix",
-        title: "Indie Mix",
-        description: "Fresh indie tracks",
-        image: "/placeholder.svg?height=48&width=48",
-      },
-      {
-        id: "workout-mix",
-        title: "Workout Mix",
-        description: "High energy tracks to keep you moving",
-        image: "/placeholder.svg?height=48&width=48",
-      },
-      {
-        id: "focus-mix",
-        title: "Focus Mix",
-        description: "Concentration-enhancing music",
-        image: "/placeholder.svg?height=48&width=48",
-      },
-      {
-        id: "throwback-mix",
-        title: "Throwback Mix",
-        description: "Nostalgic hits from the past",
-        image: "/placeholder.svg?height=48&width=48",
-      },
-    ]
+    fetchPlaylists();
+  }, [fetchPlaylists]);
 
-    setPlaylists(mockPlaylists)
-  }, [])
+  // Add a handler to refresh playlists after deletion or creation
+  const handleRefresh = useCallback(() => {
+    fetchPlaylists();
+  }, [fetchPlaylists]);
 
   return (
     <div className="playlists-page">
@@ -62,12 +28,12 @@ export default function PlaylistsPage() {
         {playlists.length > 0 ? (
           <div className="playlists-grid">
             {playlists.map((playlist) => (
-              <div key={playlist.id} className="playlist-item">
+              <div key={playlist._id} className="playlist-item">
                 <PlaylistCard
-                  id={playlist.id}
-                  title={playlist.title}
+                  id={playlist._id}
+                  title={playlist.name}
                   description={playlist.description}
-                  image={playlist.image}
+                  coverImage={playlist.coverImage}
                 />
               </div>
             ))}

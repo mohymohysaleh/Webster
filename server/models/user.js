@@ -28,6 +28,19 @@ const userSchema = new Schema({
   playlists: [{
     type: Schema.Types.ObjectId,
     ref: 'Playlist'
+  }],
+  recentSearches: [{
+    type: {
+      type: String, // 'song', 'artist', etc.
+      default: 'song'
+    },
+    song: {
+      type: Schema.Types.ObjectId,
+      ref: 'Song'
+    },
+    name: String,
+    artist: String,
+    image: String
   }]
 }, {
   timestamps: true

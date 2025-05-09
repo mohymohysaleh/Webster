@@ -170,4 +170,53 @@ router.post('/logout', (req, res) => {
   res.json({ message: 'Logged out' });
 });
 
+// Get recent searches
+router.get('/recent-searches', verifyRefreshToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate('recentSearches.song');
+    res.json(user.recentSearches || []);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch recent searches' });
+  }
+});
+
+// Add a recent search (expects a song object)
+router.post('/recent-searches', verifyRefreshToken, async (req, res) => {
+  try {
+    const { song } = req.body; // song: { _id, name, artist, image }
+    if (!song || !song._id) return res.status(400).json({ error: 'Missing song data' });
+    const user = await User.findById(req.user.id);
+    // Remove if already exists (by song._id), then add to front
+    user.recentSearches = [
+      {
+        type: 'song',
+        song: song._id,
+        name: song.name,
+        artist: song.artist,
+        image: song.image
+      },
+      ...(user.recentSearches || []).filter(s => String(s.song) !== String(song._id))
+    ].slice(0, 10);
+    await user.save();
+    await user.populate('recentSearches.song');
+    res.json(user.recentSearches);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to add recent search' });
+  }
+});
+
+// Remove a recent search (by song._id)
+router.delete('/recent-searches', verifyRefreshToken, async (req, res) => {
+  try {
+    const { songId } = req.body;
+    const user = await User.findById(req.user.id);
+    user.recentSearches = (user.recentSearches || []).filter(s => String(s.song) !== String(songId));
+    await user.save();
+    await user.populate('recentSearches.song');
+    res.json(user.recentSearches);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to remove recent search' });
+  }
+});
+
 module.exports = router; 

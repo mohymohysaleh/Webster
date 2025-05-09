@@ -1,41 +1,17 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 
+const API_URL = 'http://localhost:8000/api/playlists';
 const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
   const [playlists, setPlaylists] = useState([]);
   const [likedSongs, setLikedSongs] = useState([]);
+  const [currentSong, setCurrentSong] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (user) {
-      fetchPlaylists();
-      fetchLikedSongs();
-    }
-  }, [user]);
-
-  const fetchPlaylists = async () => {
-    try {
-      const response = await fetch('http://localhost:8000/api/playlists/my-playlists', {
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
-      }
-      const data = await response.json();
-      setPlaylists(data);
-      return data;
-    } catch (error) {
-      console.error('Error fetching playlists:', error);
-    }
-  };
-
-  const fetchLikedSongs = async () => {
+  const fetchLikedSongs = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:8000/api/playlists/liked-songs-direct', {
         credentials: 'include',
@@ -54,7 +30,34 @@ export const PlaylistProvider = ({ children }) => {
     } catch (error) {
       console.error('Error fetching liked songs:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchPlaylists();
+      fetchLikedSongs();
+    }
+  }, [user, fetchLikedSongs]);
+
+  const fetchPlaylists = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/playlists/my-playlists', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText);
+      }
+      const data = await response.json();
+      setPlaylists(data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching playlists:', error);
+    }
+  }, []);
 
   const createPlaylist = async (name, description) => {
     try {
@@ -78,7 +81,7 @@ export const PlaylistProvider = ({ children }) => {
     }
   };
 
-  const addToPlaylist = async (playlistId, songId) => {
+  const addToPlaylist = useCallback(async (playlistId, songId) => {
     try {
       const response = await fetch(`http://localhost:8000/api/playlists/${playlistId}/add-song`, {
         method: 'POST',
@@ -88,21 +91,22 @@ export const PlaylistProvider = ({ children }) => {
         credentials: 'include',
         body: JSON.stringify({ songId })
       });
+
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(errorText);
+        throw new Error('Failed to add song to playlist');
       }
+
       const updatedPlaylist = await response.json();
       setPlaylists(prev => 
         prev.map(playlist => 
           playlist._id === playlistId ? updatedPlaylist : playlist
         )
       );
-      return updatedPlaylist;
     } catch (error) {
-      console.error('Error adding to playlist:', error);
+      console.error('Error adding song to playlist:', error);
+      throw error;
     }
-  };
+  }, []);
 
   const removeFromPlaylist = async (playlistId, songId) => {
     try {
@@ -176,6 +180,10 @@ export const PlaylistProvider = ({ children }) => {
     <PlaylistContext.Provider value={{
       playlists,
       likedSongs,
+      currentSong,
+      setCurrentSong,
+      isPlaying,
+      setIsPlaying,
       createPlaylist,
       addToPlaylist,
       removeFromPlaylist,

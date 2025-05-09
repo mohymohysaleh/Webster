@@ -20,6 +20,7 @@ import PlaylistDetailPage from "./pages/playlists/PlaylistDetailPage";
 import SettingsPage from "./pages/settings/SettingsPage";
 import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
 import AdminPage from './pages/admin/AdminPage';
+import GenreDetailPage from './pages/genres/GenreDetailPage';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -136,6 +137,14 @@ function AppRoutes() {
             element={
               <PrivateRoute>
                 <AccountSettingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/genre/:id"
+            element={
+              <PrivateRoute>
+                <GenreDetailPage />
               </PrivateRoute>
             }
           />

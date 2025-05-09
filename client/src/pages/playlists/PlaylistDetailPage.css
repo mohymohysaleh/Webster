@@ -63,6 +63,7 @@
     align-items: center;
     margin-top: 8px;
     font-size: 14px;
+    position: relative;
   }
   
   .playlist-detail-creator {
@@ -78,7 +79,7 @@
   }
   
   .playlist-detail-content {
-    padding: 0 32px 32px;
+    padding: 0 32px 16px;
     flex-grow: 1;
     overflow-y: auto;
     width: 100%;
@@ -86,7 +87,7 @@
   
 
   .playlist-detail-content .song-table {
-    margin-bottom: 80px; 
+    margin-bottom: 0;
     width: 100%;
   }
   
@@ -126,5 +127,57 @@
     .playlist-detail-title {
       font-size: 36px;
     }
+  }
+  
+  .playlist-settings-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    margin-left: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    position: relative;
+  }
+  
+  .playlist-settings-menu {
+    position: absolute;
+    background: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    padding: 0.5rem 1rem;
+    right: 0;
+    top: 2.2rem;
+    z-index: 10;
+    min-width: 160px;
+  }
+  
+  .delete-playlist-btn {
+    background: none;
+    border: none;
+    color: #ff4d4f;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    width: 100%;
+  }
+  
+  .song-settings-btn {
+    background: none;
+    border: none;
+    color: #ff4d4f;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+  
+  .song-settings-btn:hover {
+    background: #333;
   }
   

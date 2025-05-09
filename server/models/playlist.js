@@ -21,6 +21,10 @@ const playlistSchema = new Schema({
   isPublic: {
     type: Boolean,
     default: false
+  },
+  coverImage: {
+    type: String,
+    default: '/placeholder.svg'
   }
 }, {
   timestamps: true

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react"
 import { IoSearchOutline, IoClose } from "react-icons/io5"
 import { useMusic } from "../../context/MusicContext"
 import "./SearchPage.css"
+import { useAuth } from '../../contexts/AuthContext'
+import { useNavigate } from 'react-router-dom'
 
 export default function SearchPage() {
   const [searchQuery, setSearchQuery] = useState("")
@@ -12,74 +14,16 @@ export default function SearchPage() {
   const [showSearchResults, setShowSearchResults] = useState(false)
   const [selectedArtist, setSelectedArtist] = useState(null)
   const [musicDatabase, setMusicDatabase] = useState([])
-
-  // Get music context
+  const { user } = useAuth()
+  const [recentSearches, setRecentSearches] = useState([])
+  const navigate = useNavigate()
+  const [genres, setGenres] = useState([])
   const { songs, playSong } = useMusic()
 
-  const recentSearches = [
-    {
-      id: "1",
-      name: "The Weeknd",
-      type: "Artist",
-      imageUrl: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      id: "2",
-      name: "Ed Sheeran",
-      type: "Artist",
-      imageUrl: "/placeholder.svg?height=80&width=80",
-    },
-    { id: "3", name: "Blinding Lights", type: "Song", imageUrl: "/placeholder.svg?height=80&width=80" },
-    { id: "4", name: "Taylor Swift", type: "Artist", imageUrl: "/placeholder.svg?height=80&width=80" },
-    { id: "5", name: "Shape of You", type: "Song", imageUrl: "/placeholder.svg?height=80&width=80" },
-  ]
-
-  const categories = [
-    {
-      id: "p1",
-      name: "Podcasts",
-      color: "#274C44",
-      imageUrl: "/placeholder.svg?height=120&width=120",
-    },
-    {
-      id: "m1",
-      name: "Made For You",
-      color: "#4B2D6F",
-      imageUrl: "/placeholder.svg?height=120&width=120",
-    },
-    { id: "c1", name: "Charts", color: "#1E3264", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "n1", name: "New Releases", color: "#E8115B", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "d1", name: "Discover", color: "#8400E7", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "l1", name: "Live Events", color: "#7358FF", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "r1", name: "Rock", color: "#E61E32", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "e1", name: "Electronic", color: "#0D73EC", imageUrl: "/placeholder.svg?height=120&width=120" },
-  ]
-
-  const topGenres = [
-    {
-      id: "po2",
-      name: "Pop",
-      color: "#C74242",
-      imageUrl: "/placeholder.svg?height=120&width=120",
-    },
-    {
-      id: "hh2",
-      name: "Hip-Hop",
-      color: "#BA5D07",
-      imageUrl: "/placeholder.svg?height=120&width=120",
-    },
-    { id: "rb1", name: "R&B", color: "#503750", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "la1", name: "Latin", color: "#E1118C", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "in1", name: "Indie", color: "#608108", imageUrl: "/placeholder.svg?height=120&width=120" },
-    { id: "cl1", name: "Classical", color: "#7D4B32", imageUrl: "/placeholder.svg?height=120&width=120" },
-  ]
-
-  // Use the songs from the music context instead of fetching again
   useEffect(() => {
     if (songs.length > 0) {
       setMusicDatabase(songs)
     } else {
-      // Fallback to fetch if context doesn't have songs yet
       const fetchMusicData = async () => {
         try {
           const response = await fetch("http://localhost:5000/api/music/db")
@@ -93,7 +37,29 @@ export default function SearchPage() {
     }
   }, [songs])
 
-  // Search functionality
+  useEffect(() => {
+    if (!user) return;
+    fetch('http://localhost:8000/auth/recent-searches', {
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(setRecentSearches)
+      .catch(() => setRecentSearches([]));
+  }, [user]);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/genres')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setGenres(data)
+        else setGenres([])
+      })
+      .catch((err) => {
+        console.error('Error fetching genres:', err);
+        setGenres([])
+      });
+  }, []);
+
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setShowSearchResults(false)
@@ -103,16 +69,13 @@ export default function SearchPage() {
 
     const query = searchQuery.toLowerCase()
 
-    // Check if searching for an artist
     const artistMatch = musicDatabase.find((song) => song.artist.toLowerCase() === query)
 
     if (artistMatch) {
-      // If exact artist match, show all songs by that artist
       setSelectedArtist(artistMatch.artist)
       const artistSongs = musicDatabase.filter((song) => song.artist.toLowerCase() === query)
       setSearchResults(artistSongs)
     } else {
-      // Otherwise search for songs that match the query in title or artist
       setSelectedArtist(null)
       const results = musicDatabase.filter(
         (song) => song.name.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query),
@@ -123,29 +86,51 @@ export default function SearchPage() {
     setShowSearchResults(true)
   }, [searchQuery, musicDatabase])
 
-  const handleRemoveRecent = (id) => {
-    console.log("Remove recent search:", id)
-  }
+  const addRecentSearch = async (song) => {
+    if (!user || !song || !song._id) return;
+    await fetch('http://localhost:8000/auth/recent-searches', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ song })
+    });
+    fetch('http://localhost:8000/auth/recent-searches', {
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(setRecentSearches);
+  };
 
-  const handleItemClick = (item) => {
-    setSearchQuery(item.name)
-    setShowRecentSearches(false)
-  }
+  const handleRemoveRecent = async (songId) => {
+    await fetch('http://localhost:8000/auth/recent-searches', {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songId })
+    });
+    setRecentSearches(prev => prev.filter(s => s.song?._id !== songId));
+  };
 
-  // Updated to play the song when clicked
-  const handleSongClick = (song, index) => {
-    // Find the index of this song in the main songs array
-    const songIndex = songs.findIndex((s) => s._id === song._id)
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") setSearchQuery("");
+  };
 
-    if (songIndex !== -1) {
-      // If found in the main songs array, play it
-      playSong(songIndex)
-    } else {
-      // If not found (which shouldn't happen if using the same data source),
-      // we could add it to the songs array or handle differently
-      console.log("Song not found in main playlist:", song.name)
+  const handleItemClick = (search) => {
+    if (search.song && search.song._id) {
+      handleSongClick(search.song);
     }
-  }
+    setShowRecentSearches(false);
+  };
+
+  const handleSongClick = (song, index) => {
+    const songIndex = songs.findIndex((s) => s._id === song._id);
+    if (songIndex !== -1) {
+      playSong(songIndex);
+      addRecentSearch(song);
+    } else {
+      console.log("Song not found in main playlist:", song.name);
+    }
+  };
 
   return (
     <div className="search-page">
@@ -161,10 +146,7 @@ export default function SearchPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setShowRecentSearches(true)}
               onBlur={() => setTimeout(() => setShowRecentSearches(false), 200)}
-              onKeyDown={(e) => {
-                if (e.key === "Escape") setSearchQuery("")
-                if (e.key === "Enter") console.log("Searching for:", searchQuery)
-              }}
+              onKeyDown={handleKeyDown}
             />
             {searchQuery && (
               <button className="clear-search-button" onClick={() => setSearchQuery("")} aria-label="Clear search">
@@ -176,24 +158,20 @@ export default function SearchPage() {
             <div className="recent-searches-panel">
               <h2 className="recent-searches-title">Recent Searches</h2>
               <div className="recent-searches-grid">
-                {recentSearches.map((item) => (
-                  <div key={item.id} className="recent-search-item" onClick={() => handleItemClick(item)}>
+                {recentSearches.map((search, idx) => (
+                  <div key={idx} className="recent-search-item" onClick={() => handleItemClick(search)}>
                     <div className="image-container">
-                      <img src={item.imageUrl || "/placeholder.svg"} alt={item.name} className="recent-search-image" />
+                      <img src={search.image || search.song?.image || '/placeholder.svg'} alt={search.name || search.song?.name} className="recent-search-image" />
                       <button
                         className="remove-search-button"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleRemoveRecent(item.id)
-                        }}
-                        aria-label={`Remove ${item.name}`}
+                        onClick={e => { e.stopPropagation(); handleRemoveRecent(search.song?._id); }}
                       >
                         <IoClose size={16} />
                       </button>
                     </div>
                     <div className="recent-search-info">
-                      <p className="recent-search-name">{item.name}</p>
-                      <p className="recent-search-type">{item.type}</p>
+                      <p className="recent-search-name">{search.name || search.song?.name}</p>
+                      <p className="recent-search-type">{search.artist || search.song?.artist}</p>
                     </div>
                   </div>
                 ))}
@@ -252,32 +230,21 @@ export default function SearchPage() {
                 </h2>
               </div>
               <div className="horizontal-scroll-layout top-genres-grid">
-                {topGenres.map((genre) => (
-                  <div
-                    key={genre.id}
-                    className="card genre-card top-genre-card"
-                    style={{ "--card-color": genre.color }}
-                  >
-                    <h3 className="card-title genre-name">{genre.name}</h3>
-                    <img src={genre.imageUrl || "/placeholder.svg"} alt="" className="genre-card-image" />
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <section className="content-section" aria-labelledby="browse-all-title">
-              <div className="section-header">
-                <h2 id="browse-all-title" className="section-title">
-                  Browse All
-                </h2>
-              </div>
-              <div className="grid-layout browse-all-grid">
-                {categories.map((category) => (
-                  <div key={category.id} className="card genre-card" style={{ "--card-color": category.color }}>
-                    <h3 className="card-title genre-name">{category.name}</h3>
-                    <img src={category.imageUrl || "/placeholder.svg"} alt="" className="genre-card-image" />
-                  </div>
-                ))}
+                {Array.isArray(genres) && genres.length > 0 ? (
+                  genres.map((genre) => (
+                    <div
+                      key={genre._id}
+                      className="card genre-card top-genre-card"
+                      style={{ "--card-color": "#222" }}
+                      onClick={() => navigate(`/genre/${genre._id}`)}
+                    >
+                      <h3 className="card-title genre-name">{genre.name}</h3>
+                      <img src={genre.coverImage || "/placeholder.svg"} alt={genre.name} className="genre-card-image" />
+                    </div>
+                  ))
+                ) : (
+                  <div style={{ color: '#fff', padding: '2rem' }}>No genres available.</div>
+                )}
               </div>
             </section>
           </>

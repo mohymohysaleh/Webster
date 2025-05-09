@@ -4,16 +4,20 @@ import { useEffect, useState } from 'react';
 import { usePlaylist } from '../../contexts/PlaylistContext';
 import { useMusic } from '../../context/MusicContext';
 import { BsHeart, BsHeartFill, BsPlayFill } from 'react-icons/bs';
+import { useAuth } from '../../contexts/AuthContext';
 import './LikesPage.css';
 
 const LikesPage = () => {
   const { likedSongs, toggleLike, fetchLikedSongs, isLiked } = usePlaylist();
   const { playSongById } = useMusic();
   const [isLiking, setIsLiking] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetchLikedSongs();
-  }, [fetchLikedSongs]);
+    if (user) {
+      fetchLikedSongs();
+    }
+  }, [user, fetchLikedSongs]);
 
   const handleLike = async (song) => {
     if (!isLiking) {

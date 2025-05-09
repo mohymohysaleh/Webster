@@ -1,4 +1,3 @@
-
 .search-page {
   display: flex;
   flex-direction: column;
@@ -101,27 +100,28 @@
 }
 
 .recent-searches-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-  gap: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  max-height: 260px;
+  overflow-y: auto;
 }
 
 .recent-search-item {
+  width: 110px;
   display: flex;
   flex-direction: column;
-  cursor: pointer;
-}
-
-.image-container {
-  position: relative;
-  margin-bottom: 12px;
+  align-items: center;
 }
 
 .recent-search-image {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
   object-fit: cover;
+  margin-bottom: 0.5rem;
 }
 
 .remove-search-button {

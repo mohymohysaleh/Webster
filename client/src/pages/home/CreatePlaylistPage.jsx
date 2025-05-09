@@ -1,29 +1,54 @@
+import { useState } from 'react';
+import { usePlaylist } from '../../contexts/PlaylistContext';
+import './CreatePlaylistPage.css';
+
 export default function CreatePlaylistPage() {
+  const { createPlaylist } = usePlaylist();
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+    try {
+      await createPlaylist(name, description);
+      setSuccess(true);
+      setName('');
+      setDescription('');
+    } catch (err) {
+      setError('Failed to create playlist.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="p-4">
-      <h1 className="h3 mb-4">Create a New Playlist</h1>
-
-      <div className="card bg-dark text-white border-0 mb-4">
-        <div className="card-body">
-          <div className="mb-3">
-            <label htmlFor="playlistName" className="form-label">
-              Playlist Name
-            </label>
-            <input type="text" className="form-control bg-black text-white" id="playlistName" />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="playlistDescription" className="form-label">
-              Description (optional)
-            </label>
-            <textarea className="form-control bg-black text-white" id="playlistDescription" rows="3"></textarea>
-          </div>
-
-          <div className="d-flex justify-content-end">
-            <button className="btn btn-danger">Create</button>
-          </div>
-        </div>
-      </div>
+    <div className="create-playlist-page">
+      <form className="create-playlist-form" onSubmit={handleSubmit}>
+        <h2>Create a New Playlist</h2>
+        <input
+          type="text"
+          placeholder="Playlist Name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          required
+        />
+        <textarea
+          placeholder="Description (optional)"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+        />
+        <button type="submit" disabled={loading || !name}>
+          {loading ? 'Creating...' : 'Create Playlist'}
+        </button>
+        {success && <div className="success-message">Playlist created!</div>}
+        {error && <div className="error-message">{error}</div>}
+      </form>
     </div>
-  )
+  );
 }

@@ -1,120 +1,127 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { useMusic } from "../../context/MusicContext"
+import { useEffect, useState, useRef } from "react"
+import { useParams, useNavigate, Navigate } from "react-router-dom"
+import { useMusic } from '../../context/MusicContext'
+import { usePlaylist } from '../../contexts/PlaylistContext'
+import { FiMoreVertical, FiTrash2, FiArrowUp, FiArrowDown } from 'react-icons/fi'
 import "./PlaylistDetailPage.css"
-import Img1 from '../../assets/images/afr.jpg'
+import { MusicPlayer } from '../../components/music-player/MusicPlayer'
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal'
 
 export default function PlaylistDetailPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
+  const { playSongById } = useMusic()
+  const { removeFromPlaylist, playlists, setPlaylists } = usePlaylist()
   const [playlist, setPlaylist] = useState(null)
-  const [playlistSongs, setPlaylistSongs] = useState([])
-  const { songs, playSong } = useMusic()
+  const [loading, setLoading] = useState(true)
+  const [showSettings, setShowSettings] = useState(null)
+  const [showPlaylistSettings, setShowPlaylistSettings] = useState(false)
+  const [renaming, setRenaming] = useState(false)
+  const [newName, setNewName] = useState('')
+  const [newDesc, setNewDesc] = useState('')
+  const renameInputRef = useRef()
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deleted, setDeleted] = useState(false)
 
-  useEffect(() => {
-    // Define playlist metadata based on ID
-    const getPlaylistInfo = () => {
-      const playlistsInfo = {
-        "chill-mix": {
-          title: "Chill Mix",
-          description: "Relaxing tunes to unwind",
-          color: "#8c67ab",
-          image: Img1,
-        },
-        "pop-mix": {
-          title: "Pop Mix",
-          description: "Today's top pop hits",
-          color: "#e8115b",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "indie-mix": {
-          title: "Indie Mix",
-          description: "Fresh indie tracks",
-          color: "#1e3264",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "pheelz-mix": {
-          title: "Pheelz Mix",
-          description: "Afrobeats and more",
-          color: "#148a08",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "daily-mix-1": {
-          title: "Daily Mix 1",
-          description: "Based on your listening history",
-          color: "#509bf5",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "daily-mix-4": {
-          title: "Daily Mix 4",
-          description: "Based on your listening history",
-          color: "#ba5d07",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "daily-mix-5": {
-          title: "Daily Mix 5",
-          description: "Based on your listening history",
-          color: "#e61e32",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "folk-acoustic": {
-          title: "Folk & Acoustic Mix",
-          description: "Soothing acoustic tracks",
-          color: "#8c1932",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "workout-mix": {
-          title: "Workout Mix",
-          description: "High energy tracks to keep you moving",
-          color: "#ff6437",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "focus-mix": {
-          title: "Focus Mix",
-          description: "Concentration-enhancing music",
-          color: "#503750",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-        "throwback-mix": {
-          title: "Throwback Mix",
-          description: "Nostalgic hits from the past",
-          color: "#e1118c",
-          image: "/placeholder.svg?height=200&width=200",
-        },
-      }
-
-      return (
-        playlistsInfo[id] || {
-          title: "Unknown Playlist",
-          description: "Playlist not found",
-          color: "#333333",
-          image: "/placeholder.svg?height=200&width=200",
-        }
-      )
-    }
-
-    setPlaylist(getPlaylistInfo())
-
-    // 6 random songs from the database
-    if (songs.length > 0) {
-      const shuffled = [...songs].sort(() => 0.5 - Math.random())
-      const selected = shuffled.slice(0, 6)
-      setPlaylistSongs(selected)
-    }
-  }, [id, songs])
-
-  const handleSongClick = (song) => {
-    // Find the index of this song in the main songs array
-    const songIndex = songs.findIndex((s) => s._id === song._id)
-
-    if (songIndex !== -1) {
-      playSong(songIndex)
+  const fetchPlaylist = async () => {
+    setLoading(true)
+    try {
+      const response = await fetch(`http://localhost:8000/api/playlists/${id}`, {
+        credentials: 'include',
+      })
+      if (!response.ok) throw new Error('Failed to fetch playlist')
+      const data = await response.json()
+      setPlaylist(data)
+    } catch (err) {
+      setPlaylist(null)
+    } finally {
+      setLoading(false)
     }
   }
 
-  if (!playlist) {
+  useEffect(() => {
+    fetchPlaylist()
+  }, [id])
+
+  const handleSongClick = (song) => {
+    playSongById(song._id)
+  }
+
+  const handleRemoveSong = async (songId) => {
+    await removeFromPlaylist(playlist._id, songId)
+    fetchPlaylist()
+  }
+
+  const handleMoveSong = async (songId, direction) => {
+    const idx = playlist.songs.findIndex(s => s._id === songId);
+    if (idx < 0) return;
+    let newSongs = [...playlist.songs];
+    if (direction === 'up' && idx > 0) {
+      [newSongs[idx - 1], newSongs[idx]] = [newSongs[idx], newSongs[idx - 1]];
+    } else if (direction === 'down' && idx < newSongs.length - 1) {
+      [newSongs[idx + 1], newSongs[idx]] = [newSongs[idx], newSongs[idx + 1]];
+    } else {
+      return;
+    }
+    // Call backend to persist order
+    await fetch(`http://localhost:8000/api/playlists/${playlist._id}/reorder-songs`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ songIds: newSongs.map(s => s._id) })
+    });
+    fetchPlaylist();
+  };
+
+  const handleDeletePlaylist = async () => {
+    setShowDeleteModal(true)
+  }
+
+  const confirmDeletePlaylist = async () => {
+    setShowDeleteModal(false)
+    await fetch(`http://localhost:8000/api/playlists/${playlist._id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    setPlaylists(prev => prev.filter(p => p._id !== playlist._id))
+    setDeleted(true)
+  }
+
+  const handleRenameClick = () => {
+    setRenaming(true)
+    setNewName(playlist.name)
+    setNewDesc(playlist.description || '')
+    setTimeout(() => renameInputRef.current?.focus(), 100)
+  }
+
+  const handleRename = async (e) => {
+    e.preventDefault()
+    await fetch(`http://localhost:8000/api/playlists/${playlist._id}/rename`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newName, description: newDesc })
+    })
+    setRenaming(false)
+    fetchPlaylist()
+  }
+
+  const handleSongAdded = () => {
+    fetchPlaylist()
+  }
+
+  if (deleted) {
+    return <Navigate to="/" replace />
+  }
+
+  if (loading) {
     return <div className="p-4 text-center">Loading...</div>
+  }
+  if (!playlist) {
+    return <div className="p-4 text-center">Playlist not found.</div>
   }
 
   return (
@@ -122,20 +129,43 @@ export default function PlaylistDetailPage() {
       {/* Header with gradient background */}
       <div
         className="playlist-detail-header"
-        style={{ background: `linear-gradient(to bottom, ${playlist.color}, #121212)` }}
+        style={{ background: `linear-gradient(to bottom, #333, #121212)` }}
       >
         <div className="playlist-detail-header-content">
           <div className="playlist-detail-image-container">
-            <img src={playlist.image || "/placeholder.svg"} alt={playlist.title} className="playlist-detail-image" />
+            <img src={playlist.coverImage || "/placeholder.svg"} alt={playlist.name} className="playlist-detail-image" />
           </div>
           <div className="playlist-detail-info">
             <div className="playlist-detail-type">PLAYLIST</div>
-            <h1 className="playlist-detail-title">{playlist.title}</h1>
+            <h1 className="playlist-detail-title">{playlist.name}</h1>
             <div className="playlist-detail-description">{playlist.description}</div>
             <div className="playlist-detail-meta">
-              <span className="playlist-detail-creator">Webster</span>
+              <span className="playlist-detail-creator">{playlist.user?.name || 'Unknown'}</span>
               <span className="playlist-detail-dot">•</span>
-              <span className="playlist-detail-songs">{playlistSongs.length} songs</span>
+              <span className="playlist-detail-songs">{playlist.songs.length} songs</span>
+              <button className="playlist-settings-btn" onClick={() => setShowPlaylistSettings(v => !v)}>
+                <FiMoreVertical size={20} />
+              </button>
+              {showPlaylistSettings && (
+                <div className="playlist-settings-menu">
+                  {!renaming ? (
+                    <>
+                      <button className="delete-playlist-btn" onClick={handleDeletePlaylist}>
+                        <FiTrash2 /> Delete Playlist
+                      </button>
+                      <button className="delete-playlist-btn" onClick={handleRenameClick}>
+                        <FiMoreVertical /> Rename Playlist
+                      </button>
+                    </>
+                  ) : (
+                    <form onSubmit={handleRename} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <input ref={renameInputRef} value={newName} onChange={e => setNewName(e.target.value)} placeholder="Playlist name" required style={{ padding: 4, borderRadius: 4, border: '1px solid #444', background: '#181818', color: '#fff' }} />
+                      <input value={newDesc} onChange={e => setNewDesc(e.target.value)} placeholder="Description (optional)" style={{ padding: 4, borderRadius: 4, border: '1px solid #444', background: '#181818', color: '#fff' }} />
+                      <button type="submit" className="delete-playlist-btn" style={{ color: '#1db954' }}>Save</button>
+                    </form>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -149,13 +179,17 @@ export default function PlaylistDetailPage() {
               <th className="song-number">#</th>
               <th className="song-title">TITLE</th>
               <th className="song-album">ALBUM</th>
-              <th className="song-date">DATE ADDED</th>
-              <th className="song-duration">⏱️</th>
+              <th className="song-actions"></th>
             </tr>
           </thead>
           <tbody>
-            {playlistSongs.map((song, index) => (
-              <tr key={song._id || index} className="song-row" onClick={() => handleSongClick(song)}>
+            {playlist.songs.map((song, index) => (
+              <tr key={song._id || index} className="song-row"
+                onMouseEnter={() => setShowSettings(song._id)}
+                onMouseLeave={() => setShowSettings(null)}
+                onClick={() => handleSongClick(song)}
+                style={{ cursor: 'pointer' }}
+              >
                 <td className="song-number">{index + 1}</td>
                 <td className="song-title">
                   <div className="song-info">
@@ -169,12 +203,34 @@ export default function PlaylistDetailPage() {
                   </div>
                 </td>
                 <td className="song-album">{song.album}</td>
-                <td className="song-date">Today</td>
-                <td className="song-duration">{song.duration}</td>
+                <td className="song-actions" onClick={e => e.stopPropagation()}>
+                  {showSettings === song._id && (
+                    <div style={{ display: 'flex', gap: 4 }}>
+                      <button className="song-settings-btn" onClick={() => handleRemoveSong(song._id)}>
+                        <FiTrash2 />
+                      </button>
+                      <button className="song-settings-btn" onClick={() => handleMoveSong(song._id, 'up')} disabled={index === 0}>
+                        <FiArrowUp />
+                      </button>
+                      <button className="song-settings-btn" onClick={() => handleMoveSong(song._id, 'down')} disabled={index === playlist.songs.length - 1}>
+                        <FiArrowDown />
+                      </button>
+                    </div>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <MusicPlayer onSongAdded={handleSongAdded} />
+        <ConfirmModal
+          isOpen={showDeleteModal}
+          title="Delete Playlist"
+          message="Are you sure you want to delete this playlist? This action cannot be undone."
+          onConfirm={confirmDeletePlaylist}
+          onCancel={() => setShowDeleteModal(false)}
+          confirmText="Delete Playlist"
+        />
       </div>
     </div>
   )
