@@ -1,25 +1,33 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Likes from './pages/likes/likes';  
-import Home from './pages/home/home';  
-import Playlists from './pages/playlists/playlists';
-import Search from './pages/search/search';
-
+import React from "react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { MusicPlayer } from "./components/MusicPlayer"
+import { Sidebar } from "./components/Sidebar"
+import HomePage from "./pages/home/HomePage"
+import SearchPage from "./pages/home/SearchPage"
+import PlaylistsPage from "./pages/home/PlaylistsPage"
+import CreatePlaylistPage from "./pages/home/CreatePlaylistPage"
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "./App.css"
 
 function App() {
   return (
-    <Router>
-      <div className="app">  {}
-        <Routes>
-          <Route path="/likes" element={<Likes />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/playlists"element={<Playlists/>}/>
-          <Route path="/search" element={<Search/>}/>
-          <Route path="/" element={<Navigate to="/home" />} />
-        </Routes>
+    <BrowserRouter>
+      <div className="d-flex vh-100 music-app">
+        <Sidebar />
+
+        <main className="flex-grow-1 overflow-auto">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/playlists" element={<PlaylistsPage />} />
+            <Route path="/create-playlist" element={<CreatePlaylistPage />} />
+          </Routes>
+        </main>
+
+        <MusicPlayer />
       </div>
-    </Router>
-  );
+    </BrowserRouter>
+  )
 }
 
-export default App;
+export default App
