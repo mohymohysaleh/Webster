@@ -1,9 +1,13 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install"
-nixpacks = { node-version = "20" }
+buildCommand = "npm install && cd server && npm install"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "cd server && node server.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 300 
+healthcheckTimeout = 300
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 10
+
+[nixpacks]
+node-version = "18" 
