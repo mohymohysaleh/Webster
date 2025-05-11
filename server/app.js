@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const playlistRoutes = require('./routes/playlist');
 const commentRoutes = require('./routes/comments');
 const genreRoutes = require('./routes/genre');
+const mongoose = require('mongoose');
 
 const app = express();
 
@@ -31,8 +32,23 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/genres', genreRoutes);
 
 // Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+app.get('/health', async (req, res) => {
+  try {
+    // Check database connection
+    const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+    
+    res.status(200).json({
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      database: dbStatus,
+      uptime: process.uptime()
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'error',
+      message: error.message
+    });
+  }
 });
 
 const PORT = process.env.PORT || 8000;
