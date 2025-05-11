@@ -11,13 +11,28 @@ const commentRoutes = require('./routes/comments');
 const genreRoutes = require('./routes/genre');
 
 const app = express();
-app.use(express.json());
-app.use(cookieParser());
+
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000', // Local development
+  'https://webster-tau.vercel.app' // Vercel frontend
+];
 
 app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api', musicRoutes);
 // app.use('/api', testRoutes);
@@ -26,14 +41,19 @@ app.use('/api/playlists', playlistRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/genres', genreRoutes);
 
-const PORT = 8000;
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
+const PORT = process.env.PORT || 8000;
 
 async function startServer() {
   try {
     await connectDB();
     console.log('Database connected');
     app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   } catch (err) {
     console.error('DB connection failed:', err);

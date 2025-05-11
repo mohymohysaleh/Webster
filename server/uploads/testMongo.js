@@ -1,12 +1,17 @@
 const mongoose = require('mongoose');
-// const dotenv = require('dotenv');
+require('dotenv').config();
 // const path = require('path');
 
 // // Load environment variables from .env file
 // dotenv.config({ path: path.join(__dirname, '../.env') });
 
-// MongoDB connection URI
-const Mongo_Uri = 'mongodb://127.0.0.1:27017/Webster';
+// Use environment variable for MongoDB URI
+const Mongo_Uri = process.env.MONGODB_URI;
+
+if (!Mongo_Uri) {
+  console.error('MongoDB URI is not defined in environment variables');
+  process.exit(1);
+}
 
 // Mongoose model for Music
 const musicSchema = new mongoose.Schema({
@@ -23,11 +28,8 @@ const Music = mongoose.model('Music', musicSchema);
 // Function to connect to MongoDB and read documents
 const testMongoConnection = async () => {
   try {
-    await mongoose.connect(Mongo_Uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('MongoDB connected');
+    await mongoose.connect(Mongo_Uri);
+    console.log('MongoDB connected successfully');
 
     // Find all documents in the Music collection
     const musicDocs = await Music.find();
@@ -38,6 +40,7 @@ const testMongoConnection = async () => {
     console.log('MongoDB connection closed');
   } catch (err) {
     console.error('MongoDB connection error:', err.message);
+    process.exit(1);
   }
 };
 
