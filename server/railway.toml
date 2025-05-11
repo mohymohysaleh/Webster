@@ -1,6 +1,7 @@
 [build]
 builder = "nixpacks"
 buildCommand = "npm install"
+nixpacks = { node-version = "20" }
 
 [deploy]
 startCommand = "npm start"
