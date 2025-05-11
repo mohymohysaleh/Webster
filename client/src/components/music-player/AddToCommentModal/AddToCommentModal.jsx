@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react';
 import './AddToCommentModal.css';
 import axios from 'axios';
 
-export function AddToCommentModal({ isOpen, onClose, onSubmit, song }) {
+export function AddToCommentModal({ isOpen, onClose, onSubmit, song, songId }) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
 
   // Fetch existing comments when modal opens
   useEffect(() => {
     const fetchComments = async () => {
-      if (!song?._id) return;
+      if (!songId) return;
       try {
-        const response = await axios.get(`/api/comments/${song._id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
+        const response = await axios.get(`http://localhost:8000/api/comments/${songId}`
+, {
+          withCredentials: true, 
         });
         setComments(response.data);
       } catch (error) {
@@ -26,25 +25,19 @@ export function AddToCommentModal({ isOpen, onClose, onSubmit, song }) {
   }, [isOpen, song]);
 
   const handleSubmit = async () => {
-    if (!comment.trim()) return;
+    if (!comment.trim() || !songId) return;
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/comments/${songId}`,
+        `http://localhost:8000/api/comments/${songId}`,
         { text: comment },
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          },
+          withCredentials: true, 
         }
       );
 
-      // Add new comment at the top
       setComments([response.data, ...comments]);
-
-      // Clear input and close modal
       setComment('');
-      onSubmit && onSubmit(comment);
       onClose();
     } catch (error) {
       console.error('Error submitting comment:', error);

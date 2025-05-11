@@ -1,27 +1,34 @@
+require('dotenv').config(); // ✅ Must be first to load .env variables
+
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    if (!process.env.MONGODB_URI) {
-      throw new Error('MONGODB_URI is not defined in environment variables');
+    // ✅ Support both local and cloud MongoDB URIs
+    const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+
+    if (!mongoUri) {
+      throw new Error('MONGO_URI or MONGODB_URI must be defined in .env');
     }
 
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('MongoDB connected successfully');
+    await mongoose.connect(mongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-    // Handle connection events
-    mongoose.connection.on('error', err => {
-      console.error('MongoDB connection error:', err);
+    console.log('✅ MongoDB connected successfully');
+
+    mongoose.connection.on('error', (err) => {
+      console.error('❌ MongoDB connection error:', err);
     });
 
     mongoose.connection.on('disconnected', () => {
-      console.log('MongoDB disconnected');
+      console.log('⚠️ MongoDB disconnected');
     });
 
   } catch (err) {
-    console.error('MongoDB connection failed:', err.message);
-    process.exit(1);
+    console.error('❌ MongoDB connection failed:', err.message);
+    process.exit(1); // Exit the app if DB fails
   }
 };
 
