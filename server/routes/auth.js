@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const User = require('../models/user');
-const jwt = require('../utils/jwt');
+const jwt = require('../utils/JWT');
 const verifyRefreshToken = require('../middleware/verifyToken');
 const router = express.Router();
 require('dotenv').config();
