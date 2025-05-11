@@ -1,15 +1,15 @@
 FROM node:18-slim
 
-WORKDIR /app
+WORKDIR /app/server
 
 # Copy package files
-COPY package*.json ./
+COPY server/package*.json ./
 
 # Install dependencies
 RUN npm install --production
 
 # Copy the rest of the application
-COPY . .
+COPY server/ .
 
 # Expose the port
 EXPOSE 3000
