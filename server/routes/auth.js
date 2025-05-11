@@ -7,10 +7,14 @@ const router = express.Router();
 require('dotenv').config();
 
 router.get('/login', (req, res) => {
+  const redirectUri = process.env.NODE_ENV === 'production' 
+    ? `${process.env.FRONTEND_URL}/auth/google/callback`
+    : 'http://localhost:5173/auth/google/callback';
+
   const url = `https://accounts.google.com/o/oauth2/auth?` +
     `response_type=code&` +
     `client_id=${process.env.GOOGLE_CLIENT_ID}&` +
-    `redirect_uri=${process.env.FRONTEND_URL}/auth/google/callback&` +
+    `redirect_uri=${redirectUri}&` +
     `scope=openid%20profile%20email`;
 
   res.json({ login_url: url });
@@ -18,13 +22,16 @@ router.get('/login', (req, res) => {
 
 router.post('/google/callback', async (req, res) => {
   const { code } = req.body;
+  const redirectUri = process.env.NODE_ENV === 'production' 
+    ? `${process.env.FRONTEND_URL}/auth/google/callback`
+    : 'http://localhost:5173/auth/google/callback';
 
   try {
     const tokenResponse = await axios.post('https://oauth2.googleapis.com/token', {
       code,
       client_id: process.env.GOOGLE_CLIENT_ID,
       client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: `${process.env.FRONTEND_URL}/auth/google/callback`,
+      redirect_uri: redirectUri,
       grant_type: 'authorization_code'
     }, {
       headers: { 'Content-Type': 'application/json' }
