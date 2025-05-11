@@ -12,8 +12,12 @@ RUN npm install --production
 # Copy server files
 COPY server/ .
 
+# Set environment variables
+ENV PORT=8000
+ENV NODE_ENV=production
+
 # Expose the port
-EXPOSE 3000
+EXPOSE 8000
 
 # Start the server
 CMD ["node", "server.js"] 
