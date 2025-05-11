@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install --legacy-peer-deps && cd server && npm install --legacy-peer-deps"
+buildCommand = "cd server && npm install --omit=dev --no-package-lock"
 
 [deploy]
 startCommand = "cd server && node server.js"
@@ -10,4 +10,4 @@ healthcheckTimeout = 300
 [nixpacks]
 node-version = "18"
 npm-version = "10.2.4"
-install-command = "npm install --legacy-peer-deps" 
+install-command = "npm install --omit=dev --no-package-lock" 
