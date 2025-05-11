@@ -1,13 +1,15 @@
 "use client"
-
 import { useRef, useEffect, useState } from "react"
 import { Shuffle, SkipBack, Play, Pause, SkipForward, Repeat, Volume2, Heart, Plus } from "lucide-react"
 import { useMusic } from "../../context/MusicContext"
 import { usePlaylist } from "../../contexts/PlaylistContext"
 import { useAuth } from "../../contexts/AuthContext"
 import { AddToPlaylistModal } from "./AddToPlaylistModal/AddToPlaylistModal"
+import { AddToCommentModal } from "./AddToCommentModal/AddToCommentModal"
 import "./MusicPlayer.css"
 import { useLocation } from 'react-router-dom'
+
+
 
 export function MusicPlayer({ onSongAdded }) {
   const audioRef = useRef(null)
@@ -16,7 +18,8 @@ export function MusicPlayer({ onSongAdded }) {
   const { user } = useAuth()
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false)
   const location = useLocation()
-
+  const [isAddToCommentModalOpen, setIsAddToCommentModalOpen] = useState(false);
+  
   const [progress, setProgress] = useState(0)
   const [volume, setVolume] = useState(75)
   const [isLiking, setIsLiking] = useState(false)
@@ -73,6 +76,7 @@ export function MusicPlayer({ onSongAdded }) {
     }
   }
 
+
   const handleSongAdded = (playlistId) => {
     if (onSongAdded) onSongAdded(playlistId);
   }
@@ -105,13 +109,14 @@ export function MusicPlayer({ onSongAdded }) {
             >
               <Heart size={16} fill={isLiked(currentSong._id) ? "currentColor" : "none"} />
             </button>
-            <button
+             <button
               className="btn btn-link p-0 ms-2 text-secondary"
               onClick={() => setIsAddToPlaylistModalOpen(true)}
               disabled={!currentSong._id}
             >
               <Plus size={16} />
             </button>
+         
           </div>
 
           {/* Controls */}
@@ -120,6 +125,7 @@ export function MusicPlayer({ onSongAdded }) {
               <button className="btn btn-link p-0 text-secondary">
                 <Shuffle size={16} />
               </button>
+              
               <button className="btn btn-link p-0 text-secondary" onClick={skipPrev}>
                 <SkipBack size={20} />
               </button>
@@ -136,6 +142,14 @@ export function MusicPlayer({ onSongAdded }) {
               <button className="btn btn-link p-0 text-secondary">
                 <Repeat size={16} />
               </button>
+
+              <button
+              className="btn btn-link p-0 ms-2 text-secondary"
+              onClick={() => setIsAddToCommentModalOpen(true)}
+              disabled={!currentSong?._id}
+            >
+               💬
+            </button>
             </div>
 
             {/* Seek Bar */}
@@ -184,6 +198,12 @@ export function MusicPlayer({ onSongAdded }) {
         song={currentSong}
         onSongAdded={handleSongAdded}
       />
-    </div>
-  )
+     <AddToCommentModal
+  isOpen={isAddToCommentModalOpen}
+  onClose={() => setIsAddToCommentModalOpen(false)}
+  song={currentSong}
+
+/>
+</div>)
+  
 }

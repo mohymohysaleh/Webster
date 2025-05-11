@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { PlaylistProvider } from './contexts/PlaylistContext';
 import { MusicProvider } from "./context/MusicContext";
+import { CommentProvider } from './contexts/CommentContext';
 import { useMusic } from "./context/MusicContext";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
@@ -161,21 +162,23 @@ function App() {
     <Router>
       <AuthProvider>
         <PlaylistProvider>
-          <MusicProvider>
-            <AppRoutes />
-            <ToastContainer 
-              position="bottom-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="dark"
-            />
-          </MusicProvider>
+          <CommentProvider>
+            <MusicProvider>
+              <AppRoutes />
+              <ToastContainer 
+                position="bottom-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+              />
+            </MusicProvider>
+          </CommentProvider>
         </PlaylistProvider>
       </AuthProvider>
     </Router>
