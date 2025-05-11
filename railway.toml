@@ -1,14 +1,7 @@
 [build]
 builder = "DOCKERFILE"
-dockerfilePath = "server/Dockerfile"
-buildContext = "server"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "cd server && node server.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 300
-
-[nixpacks]
-node-version = "18"
-npm-version = "10.2.4"
-install-command = "npm install --omit=dev --no-package-lock" 
+healthcheckTimeout = 300 
