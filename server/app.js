@@ -7,6 +7,7 @@ const musicRoutes = require('./routes/mediaRoutes');
 const connectDB = require('./config/mongo');
 const authRoutes = require('./routes/auth');
 const playlistRoutes = require('./routes/playlist');
+const commentRoutes = require('./routes/comments');
 const genreRoutes = require('./routes/genre');
 
 const app = express();
@@ -22,6 +23,7 @@ app.use('/api', musicRoutes);
 // app.use('/api', testRoutes);
 app.use('/auth', authRoutes);
 app.use('/api/playlists', playlistRoutes);
+app.use('/api/comments', commentRoutes);
 app.use('/api/genres', genreRoutes);
 
 const PORT = 8000;

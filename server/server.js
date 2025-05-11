@@ -9,10 +9,12 @@
 const app = require('./app');
 const authRoutes = require('./routes/auth');
 const playlistRoutes = require('./routes/playlist');
+const commentRoutes = require('./routes/comments');
 const adminRoutes = require('./routes/admin');
 const Song = require('./models/song');
 const fetchMusicData = require('./utils/apiFetcher');
 const Playlist = require('./models/playlist');
+const comment = require('./models/comment');
 const User = require('./models/user');
 const Genre = require('./models/genre');
 
@@ -84,7 +86,7 @@ startServer();
 app.use('/auth', authRoutes);
 app.use('/api/playlists', playlistRoutes);
 app.use('/api/admin', adminRoutes);
-
+app.use('/api/comments', commentRoutes);
 process.on('SIGINT', () => {
   server.close(() => {
     console.log('Server closed');
