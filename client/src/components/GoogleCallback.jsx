@@ -17,7 +17,8 @@ const GoogleCallback = () => {
           throw new Error('No code provided');
         }
 
-        const response = await fetch('http://localhost:8000/auth/google/callback', {
+        const serverUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const response = await fetch(`${serverUrl}/auth/google/callback`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

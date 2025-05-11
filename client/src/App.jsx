@@ -1,9 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { PlaylistProvider } from './contexts/PlaylistContext';
-import { MusicProvider } from "./context/MusicContext";
+import { MusicProvider } from './context/MusicContext';
 import { CommentProvider } from './contexts/CommentContext';
-import { useMusic } from "./context/MusicContext";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
@@ -22,6 +21,10 @@ import SettingsPage from "./pages/settings/SettingsPage";
 import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
 import AdminPage from './pages/admin/AdminPage';
 import GenreDetailPage from './pages/genres/GenreDetailPage';
+import Streamer from './components/live-streaming/streamer';
+import Listener from './components/live-streaming/listener';
+ 
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -149,6 +152,26 @@ function AppRoutes() {
               </PrivateRoute>
             }
           />
+          
+          {/* Add Streamer and Listener routes */}
+          <Route
+            path="/streamer"
+            element={
+              <PrivateRoute>
+                <Streamer />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/listener"
+            element={
+              <PrivateRoute>
+                <Listener />
+              </PrivateRoute>
+            }
+          />
+          
+          {/* Catch-all route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>
@@ -185,4 +208,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
