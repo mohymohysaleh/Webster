@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 // dotenv.config({ path: path.join(__dirname, '../.env') });
 
 // MongoDB connection URI
-const Mongo_Uri = 'mongodb://127.0.0.1:27017/Webster';
+const Mongo_Uri = 'mongodb+srv://kareem:123@webster.wmzywee.mongodb.net/?retryWrites=true&w=majority&appName=webster';
 
 // Mongoose model for Music
 const musicSchema = new mongoose.Schema({
