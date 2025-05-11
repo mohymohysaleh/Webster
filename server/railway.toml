@@ -6,8 +6,6 @@ buildCommand = "npm install && cd server && npm install"
 startCommand = "cd server && node server.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
-restartPolicyType = "on-failure"
-restartPolicyMaxRetries = 10
 
 [nixpacks]
 node-version = "18" 
