@@ -45,6 +45,19 @@
   .sidebar.open {
     left: 0;
   }
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.4);
+    z-index: 1999;
+  }
+  .sidebar.open ~ .sidebar-overlay {
+    display: block;
+  }
   .sidebar-hamburger {
     display: block;
     position: fixed;

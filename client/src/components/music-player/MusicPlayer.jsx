@@ -175,9 +175,9 @@ export function MusicPlayer({ onSongAdded }) {
 
           {/* Volume */}
           <div className="col-3 d-flex align-items-center justify-content-end gap-2">
-            <Volume2 size={16} className="text-secondary" />
+            <Volume2 size={16} className="text-secondary volume-icon" />
             <div
-              className="progress"
+              className="progress volume-bar"
               style={{ width: "100px", height: "4px", cursor: "pointer" }}
               onClick={(e) => {
                 const rect = e.target.getBoundingClientRect()
