@@ -7,12 +7,11 @@ export function AddToCommentModal({ isOpen, onClose, onSubmit, song, songId }) {
   const [comments, setComments] = useState([]);
 
   // Fetch existing comments when modal opens
-  useEffect(() => {
+  useEffect(() => { 
     const fetchComments = async () => {
       if (!songId) return;
       try {
-        const response = await axios.get(`http://localhost:8000/api/comments/${songId}`
-, {
+        const response = await axios.get(`https://webster-production.up.railway.app/api/comments/${songId}`, {
           withCredentials: true, 
         });
         setComments(response.data);
@@ -29,7 +28,7 @@ export function AddToCommentModal({ isOpen, onClose, onSubmit, song, songId }) {
 
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/comments/${songId}`,
+        `https://webster-production.up.railway.app/api/comments/${songId}`,
         { text: comment },
         {
           withCredentials: true, 

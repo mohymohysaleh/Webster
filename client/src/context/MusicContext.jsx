@@ -45,7 +45,7 @@ export function MusicProvider({ children }) {
 
   const fetchSongs = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/songs', {
+      const response = await fetch('https://webster-production.up.railway.app/api/songs', {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -67,7 +67,7 @@ export function MusicProvider({ children }) {
 
   const addSong = async (songData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/admin/songs', {
+      const response = await fetch('https://webster-production.up.railway.app/api/admin/songs', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -90,7 +90,7 @@ export function MusicProvider({ children }) {
 
   const deleteSong = async (songId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/songs/${songId}`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/admin/songs/${songId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {

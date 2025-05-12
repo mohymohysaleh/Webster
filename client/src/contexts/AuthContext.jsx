@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   const checkAuth = async () => {
     try {
-      const response = await fetch('http://localhost:8000/auth/me', {
+      const response = await fetch('https://webster-production.up.railway.app/auth/me', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async () => {
     try {
-      const response = await fetch('http://localhost:8000/auth/login', {
+      const response = await fetch('https://webster-production.up.railway.app/auth/login', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
       if (!response.ok) {
         const error = await response.text();
         throw new Error(error);
-      }
+      } 
       const data = await response.json();
       window.location.href = data.login_url;
     } catch (error) {
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      const response = await fetch('http://localhost:8000/auth/logout', {
+      const response = await fetch('https://webster-production.up.railway.app/auth/logout', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
   // Delete the current user's account
   const deleteAccount = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/playlists/delete-account', {
+      const response = await fetch('https://webster-production.up.railway.app/api/playlists/delete-account', {
         method: 'DELETE',
         credentials: 'include',
         headers: {
@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
   // Update user profile information
   const updateProfile = async (userData) => {
     try {
-      const response = await fetch('http://localhost:8000/auth/update-profile', {
+      const response = await fetch('https://webster-production.up.railway.app/auth/update-profile', {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }) => {
 
   const getAllUsers = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/admin/users', {
+      const response = await fetch('https://webster-production.up.railway.app/api/admin/users', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -150,7 +150,7 @@ export const AuthProvider = ({ children }) => {
 
   const updateUserRole = async (userId, newRole) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/users/${userId}/role`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/admin/users/${userId}/role`, {
         method: 'PATCH',
         credentials: 'include',
         headers: {
@@ -170,7 +170,7 @@ export const AuthProvider = ({ children }) => {
 
   const deleteUser = async (userId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/users/${userId}`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/admin/users/${userId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {

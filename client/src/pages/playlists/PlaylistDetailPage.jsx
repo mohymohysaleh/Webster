@@ -28,7 +28,7 @@ export default function PlaylistDetailPage() {
   const fetchPlaylist = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`http://localhost:8000/api/playlists/${id}`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/playlists/${id}`, {
         credentials: 'include',
       })
       if (!response.ok) throw new Error('Failed to fetch playlist')
@@ -66,7 +66,7 @@ export default function PlaylistDetailPage() {
       return;
     }
     // Call backend to persist order
-    await fetch(`http://localhost:8000/api/playlists/${playlist._id}/reorder-songs`, {
+    await fetch(`https://webster-production.up.railway.app/api/playlists/${playlist._id}/reorder-songs`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -81,7 +81,7 @@ export default function PlaylistDetailPage() {
 
   const confirmDeletePlaylist = async () => {
     setShowDeleteModal(false)
-    await fetch(`http://localhost:8000/api/playlists/${playlist._id}`, {
+    await fetch(`https://webster-production.up.railway.app/api/playlists/${playlist._id}`, {
       method: 'DELETE',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' }
@@ -99,7 +99,7 @@ export default function PlaylistDetailPage() {
 
   const handleRename = async (e) => {
     e.preventDefault()
-    await fetch(`http://localhost:8000/api/playlists/${playlist._id}/rename`, {
+    await fetch(`https://webster-production.up.railway.app/api/playlists/${playlist._id}/rename`, {
       method: 'PATCH',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

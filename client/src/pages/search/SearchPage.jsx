@@ -26,7 +26,7 @@ export default function SearchPage() {
     } else {
       const fetchMusicData = async () => {
         try {
-          const response = await fetch("http://localhost:5000/api/music/db")
+          const response = await fetch("https://webster-tau.vercel.app/api/music/db")
           const data = await response.json()
           setMusicDatabase(data)
         } catch (error) {
@@ -39,7 +39,7 @@ export default function SearchPage() {
 
   useEffect(() => {
     if (!user) return;
-    fetch('http://localhost:8000/auth/recent-searches', {
+    fetch('https://webster-production.up.railway.app/auth/recent-searches', {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -48,7 +48,7 @@ export default function SearchPage() {
   }, [user]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/genres')
+    fetch('https://webster-production.up.railway.app/api/genres')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setGenres(data)
@@ -88,13 +88,13 @@ export default function SearchPage() {
 
   const addRecentSearch = async (song) => {
     if (!user || !song || !song._id) return;
-    await fetch('http://localhost:8000/auth/recent-searches', {
+    await fetch('https://webster-production.up.railway.app/auth/recent-searches', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ song })
     });
-    fetch('http://localhost:8000/auth/recent-searches', {
+    fetch('https://webster-production.up.railway.app/auth/recent-searches', {
       credentials: 'include',
     })
       .then(res => res.json())
@@ -102,7 +102,7 @@ export default function SearchPage() {
   };
 
   const handleRemoveRecent = async (songId) => {
-    await fetch('http://localhost:8000/auth/recent-searches', {
+    await fetch('https://webster-production.up.railway.app/auth/recent-searches', {
       method: 'DELETE',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

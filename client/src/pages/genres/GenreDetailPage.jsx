@@ -14,7 +14,7 @@ export default function GenreDetailPage() {
     const fetchGenre = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:8000/api/genres/${id}`);
+        const response = await fetch(`https://webster-production.up.railway.app/api/genres/${id}`);
         if (!response.ok) throw new Error('Failed to fetch genre');
         const data = await response.json();
         setGenre(data);

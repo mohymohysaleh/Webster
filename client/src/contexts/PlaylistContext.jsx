@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 
-const API_URL = 'http://localhost:8000/api/playlists';
+const API_URL = 'https://webster-production.up.railway.app/api/playlists';
 const PlaylistContext = createContext();
 
 export const PlaylistProvider = ({ children }) => {
@@ -13,7 +13,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const fetchLikedSongs = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/playlists/liked-songs-direct', {
+      const response = await fetch('https://webster-production.up.railway.app/api/playlists/liked-songs-direct', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const fetchPlaylists = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/playlists/my-playlists', {
+      const response = await fetch('https://webster-production.up.railway.app/api/playlists/my-playlists', {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -61,7 +61,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const createPlaylist = async (name, description) => {
     try {
-      const response = await fetch('http://localhost:8000/api/playlists/create', {
+      const response = await fetch('https://webster-production.up.railway.app/api/playlists/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -83,7 +83,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const addToPlaylist = useCallback(async (playlistId, songId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/playlists/${playlistId}/add-song`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/playlists/${playlistId}/add-song`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -110,7 +110,7 @@ export const PlaylistProvider = ({ children }) => {
 
   const removeFromPlaylist = async (playlistId, songId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/playlists/${playlistId}/remove-song/${songId}`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/playlists/${playlistId}/remove-song/${songId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {
@@ -150,7 +150,7 @@ export const PlaylistProvider = ({ children }) => {
     try {
       console.log('Toggling like for song:', song._id);
       // Make the API call
-      const response = await fetch(`http://localhost:8000/api/playlists/like-song/${song._id}`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/playlists/like-song/${song._id}`, {
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -6,7 +6,7 @@ export const CommentProvider = ({ children }) => {
 
   const fetchComments = useCallback (async (songId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/comments/${songId}`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/comments/${songId}`, {
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export const CommentProvider = ({ children }) => {
 
   const addComment = useCallback(async (songId, text) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/comments/${songId}/add-comment`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/comments/${songId}/add-comment`, {
         method: 'POST',
          headers: {
           'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ export const CommentProvider = ({ children }) => {
 
   const deleteComment = async (commentId, songId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/comments/${commentId}/delete-comment/${songId}`, {
+      const response = await fetch(`https://webster-production.up.railway.app/api/comments/${commentId}/delete-comment/${songId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {

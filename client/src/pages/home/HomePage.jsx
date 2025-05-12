@@ -14,7 +14,7 @@ export default function HomePage() {
   }, [fetchPlaylists]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/genres')
+    fetch('https://webster-production.up.railway.app/api/genres')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setGenres(data)

@@ -27,7 +27,7 @@ const customFetch = async (url, options = {}) => {
     console.log(`Fetching ${url}...`);
 
     // Make the request
-    const response = await fetch(`http://localhost:8000${url}`, mergedOptions);
+    const response = await fetch(`https://webster-production.up.railway.app${url}`, mergedOptions);
 
     // Handle non-2xx responses
     if (!response.ok) {
