@@ -1,7 +1,7 @@
 // client/src/components/live-stream/LiveStream.jsx
 import React, { useState } from 'react';
-import Streamer from './Streamer.jsx';
-import Listener from './Listener.jsx';
+import Streamer from './Streamer';
+import Listener from './Listener';
 
 import './liveStream.css';
 
