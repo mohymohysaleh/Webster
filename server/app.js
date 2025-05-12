@@ -65,30 +65,5 @@ app.get('/health', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 8000;
-
-async function startServer() {
-  try {
-    await connectDB();
-    console.log('Database connected successfully');
-    
-    const server = app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`Health check available at http://localhost:${PORT}/health`);
-    });
-
-    // Handle server errors
-    server.on('error', (error) => {
-      console.error('Server error:', error);
-      process.exit(1);
-    });
-
-  } catch (err) {
-    console.error('Server startup failed:', err);
-    process.exit(1);
-  }
-}
-
-startServer();
 
 module.exports = app;
