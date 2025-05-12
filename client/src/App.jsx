@@ -20,10 +20,7 @@ import PlaylistDetailPage from "./pages/playlists/PlaylistDetailPage";
 import SettingsPage from "./pages/settings/SettingsPage";
 import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
 import AdminPage from './pages/admin/AdminPage';
-import GenreDetailPage from './pages/genres/GenreDetailPage';
-import Streamer from './components/live-streaming/Streamer';
-import Listener from './components/live-streaming/Listener';
- 
+import GenreDetailPage from './pages/genres/GenreDetailPage'; 
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -176,7 +173,10 @@ function AppRoutes() {
           element={
             <PrivateRoute>
               <LiveStreamPage />
-            </PrivateRoute>}/>
+            </PrivateRoute>}
+          />
+
+          
           
           {/* Catch-all route */}
           <Route path="*" element={<Navigate to="/" />} />
