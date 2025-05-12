@@ -68,8 +68,8 @@ router.post('/google/callback', async (req, res) => {
 
     res.cookie('refresh_token', refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
+      secure: true,
+      sameSite: 'None',
       path: '/',
       maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
     });
