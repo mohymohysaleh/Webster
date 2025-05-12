@@ -1,5 +1,3 @@
-//client\src\App.jsx
-
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { PlaylistProvider } from './contexts/PlaylistContext';
@@ -7,8 +5,7 @@ import { MusicProvider } from './context/MusicContext';
 import { CommentProvider } from './contexts/CommentContext';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-// Add to your imports in App.jsx
-import LiveStreamPage from './pages/liveStream/liveStream';
+
 import Login from './components/Login';
 import GoogleCallback from './components/GoogleCallback';
 import { MusicPlayer } from "./components/music-player/MusicPlayer";
@@ -56,35 +53,130 @@ const PrivateRoute = ({ children, adminOnly = false }) => {
 function AppRoutes() {
   const { user } = useAuth();
 
-  return (
-    <Routes>
-      {/* Always available */}
-      <Route path="/auth/google/callback" element={<GoogleCallback />} />
+  if (!user) {
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/auth/google/callback" element={<GoogleCallback />} />
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
+    );
+  }
 
-      {!user ? (
-        <>
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login" />} />
-        </>
-      ) : (
-        <>
-          <Route path="/" element={<PrivateRoute><HomePage /></PrivateRoute>} />
-          <Route path="/search" element={<PrivateRoute><SearchPage /></PrivateRoute>} />
-          <Route path="/playlists" element={<PrivateRoute><PlaylistsPage /></PrivateRoute>} />
-          <Route path="/playlist/:id" element={<PrivateRoute><PlaylistDetailPage /></PrivateRoute>} />
-          <Route path="/likes" element={<PrivateRoute><LikesPage /></PrivateRoute>} />
-          <Route path="/create-playlist" element={<PrivateRoute><CreatePlaylistPage /></PrivateRoute>} />
-          <Route path="/live-stream" element={<PrivateRoute><LiveStreamPage /></PrivateRoute>} />
-          <Route path="/settings" element={<PrivateRoute><SettingsPage /></PrivateRoute>} />
-          <Route path="/account-settings" element={<PrivateRoute><AccountSettingsPage /></PrivateRoute>} />
-          <Route path="/genre/:id" element={<PrivateRoute><GenreDetailPage /></PrivateRoute>} />
-          <Route path="/admin" element={<PrivateRoute adminOnly><AdminPage /></PrivateRoute>} />
-          <Route path="/streamer" element={<PrivateRoute><Streamer /></PrivateRoute>} />
-          <Route path="/listener" element={<PrivateRoute><Listener /></PrivateRoute>} />
+  return (
+    <div className="d-flex vh-100 music-app">
+      <Sidebar />
+      <div className="main-content">
+        <SettingsButton />
+        <Routes>
+          {/* Admin-only route */}
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute adminOnly>
+                <AdminPage />
+              </PrivateRoute>
+            }
+          />
+          
+          {/* Regular user routes */}
+          <Route
+            path="/"
+            element={
+              <PrivateRoute>
+                <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <PrivateRoute>
+                <SearchPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/playlists"
+            element={
+              <PrivateRoute>
+                <PlaylistsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/playlist/:id"
+            element={
+              <PrivateRoute>
+                <PlaylistDetailPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/likes"
+            element={
+              <PrivateRoute>
+                <LikesPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/create-playlist"
+            element={
+              <PrivateRoute>
+                <CreatePlaylistPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <PrivateRoute>
+                <SettingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/account-settings"
+            element={
+              <PrivateRoute>
+                <AccountSettingsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/genre/:id"
+            element={
+              <PrivateRoute>
+                <GenreDetailPage />
+              </PrivateRoute>
+            }
+          />
+          
+          {/* Add Streamer and Listener routes */}
+          <Route
+            path="/streamer"
+            element={
+              <PrivateRoute>
+                <Streamer />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/listener"
+            element={
+              <PrivateRoute>
+                <Listener />
+              </PrivateRoute>
+            }
+          />
+          
+          {/* Catch-all route */}
           <Route path="*" element={<Navigate to="/" />} />
-        </>
-      )}
-    </Routes>
+        </Routes>
+      </div>
+      <MusicPlayer />
+    </div>
   );
 }
 
@@ -96,6 +188,18 @@ function App() {
           <CommentProvider>
             <MusicProvider>
               <AppRoutes />
+              <ToastContainer 
+                position="bottom-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+              />
             </MusicProvider>
           </CommentProvider>
         </PlaylistProvider>
