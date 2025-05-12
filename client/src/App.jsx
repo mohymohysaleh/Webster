@@ -5,7 +5,7 @@ import { MusicProvider } from './context/MusicContext';
 import { CommentProvider } from './contexts/CommentContext';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-
+import LiveStreamPage from './pages/liveStream/liveStream';
 import Login from './components/Login';
 import GoogleCallback from './components/GoogleCallback';
 import { MusicPlayer } from "./components/music-player/MusicPlayer";
@@ -20,10 +20,7 @@ import PlaylistDetailPage from "./pages/playlists/PlaylistDetailPage";
 import SettingsPage from "./pages/settings/SettingsPage";
 import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
 import AdminPage from './pages/admin/AdminPage';
-import GenreDetailPage from './pages/genres/GenreDetailPage';
-import Streamer from './components/live-streaming/streamer';
-import Listener from './components/live-streaming/listener';
- 
+import GenreDetailPage from './pages/genres/GenreDetailPage'; 
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -153,7 +150,7 @@ function AppRoutes() {
             }
           />
           
-          {/* Add Streamer and Listener routes */}
+          {/* Add Streamer and Listener routes
           <Route
             path="/streamer"
             element={
@@ -169,7 +166,17 @@ function AppRoutes() {
                 <Listener />
               </PrivateRoute>
             }
+          /> */}
+
+        <Route
+          path="/live-stream"
+          element={
+            <PrivateRoute>
+              <LiveStreamPage />
+            </PrivateRoute>}
           />
+
+          
           
           {/* Catch-all route */}
           <Route path="*" element={<Navigate to="/" />} />
