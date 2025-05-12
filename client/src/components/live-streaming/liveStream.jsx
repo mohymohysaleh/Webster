@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Streamer from './streamer';
 import Listener from './listener';
 
-import './LiveStream.css';
+import './liveStream.css';
 
 const LiveStream = () => {
   const [role, setRole] = useState(null);
