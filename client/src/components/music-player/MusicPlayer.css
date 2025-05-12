@@ -35,3 +35,48 @@
 .music-player .progress {
   width: 100%;
 }
+
+@media (max-width: 768px) {
+  .music-player {
+    height: auto;
+    min-height: 120px;
+    padding-bottom: 8px;
+  }
+  .music-player-container {
+    padding: 0 4px;
+  }
+  .music-player .row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .music-player .col-3,
+  .music-player .col-6 {
+    width: 100%;
+    padding: 0;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .music-player .col-3 {
+    flex-direction: row;
+    gap: 8px;
+  }
+  .music-player .col-6 {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .music-player .progress {
+    width: 100%;
+  }
+  .music-player .btn {
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 1.2rem;
+  }
+  .music-player .bg-secondary {
+    width: 36px !important;
+    height: 36px !important;
+  }
+}

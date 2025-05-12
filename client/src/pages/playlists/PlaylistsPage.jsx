@@ -1,12 +1,14 @@
 "use client"
 
 import { useEffect, useCallback } from "react"
+import { useNavigate } from "react-router-dom"
 import { PlaylistCard } from "../../components/playlist-card/PlaylistCard"
 import { usePlaylist } from '../../contexts/PlaylistContext';
 import "./PlaylistsPage.css"
 
 export default function PlaylistsPage() {
   const { playlists, fetchPlaylists } = usePlaylist();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPlaylists();
@@ -41,7 +43,7 @@ export default function PlaylistsPage() {
         ) : (
           <div className="empty-playlists text-center text-secondary mt-5">
             <p>You don't have any playlists yet</p>
-            <button className="btn btn-outline-light mt-3">Create Playlist</button>
+            <button className="btn btn-outline-light mt-3" onClick={() => navigate('/create-playlist')}>Create Playlist</button>
           </div>
         )}
       </div>
