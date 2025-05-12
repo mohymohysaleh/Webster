@@ -17,7 +17,8 @@ const GoogleCallback = () => {
           throw new Error('No code provided');
         }
 
-        const serverUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const serverUrl = 'https://webster-production.up.railway.app';
+        /*import.meta.env.VITE_API_URL || 'http://localhost:8000'*/;
         const response = await fetch(`${serverUrl}/auth/google/callback`, {
           method: 'POST',
           headers: {
