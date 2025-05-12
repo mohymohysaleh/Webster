@@ -7,6 +7,8 @@
 // });
 
 const app = require('./app');
+const http = require('http');
+const setupSocket = require('./config/socket');
 const authRoutes = require('./routes/auth');
 const playlistRoutes = require('./routes/playlist');
 const commentRoutes = require('./routes/comments');
@@ -18,11 +20,14 @@ const comment = require('./models/comment');
 const User = require('./models/user');
 const Genre = require('./models/genre');
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8000;
 
 const GENRES = [
   'Pop', 'Hip-Hop', 'R&B', 'Latin', 'Indie', 'Classical'
 ];
+
+const server = http.createServer(app);
+const io = setupSocket(server);
 
 async function seedSongsFromAPI() {
   const existing = await Song.countDocuments();
@@ -75,8 +80,8 @@ async function seedGenres() {
 async function startServer() {
   await seedSongsFromAPI();
   await seedGenres();
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
   });
 }
 
@@ -87,6 +92,10 @@ app.use('/auth', authRoutes);
 app.use('/api/playlists', playlistRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/comments', commentRoutes);
+
+// Optionally, export io for use elsewhere
+module.exports = { app, server, io };
+
 process.on('SIGINT', () => {
   server.close(() => {
     console.log('Server closed');
