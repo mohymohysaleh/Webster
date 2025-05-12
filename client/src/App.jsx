@@ -21,8 +21,8 @@ import SettingsPage from "./pages/settings/SettingsPage";
 import AccountSettingsPage from "./pages/settings/AccountSettingsPage";
 import AdminPage from './pages/admin/AdminPage';
 import GenreDetailPage from './pages/genres/GenreDetailPage';
-import Streamer from './components/live-streaming/streamer';
-import Listener from './components/live-streaming/listener';
+import Streamer from './components/live-streaming/Streamer';
+import Listener from './components/live-streaming/Listener';
  
 
 import "bootstrap/dist/css/bootstrap.min.css";
