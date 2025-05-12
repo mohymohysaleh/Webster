@@ -15,7 +15,16 @@ const LikesPage = () => {
 
   useEffect(() => {
     if (user) {
-      fetchLikedSongs();
+      fetchLikedSongs().then((songs) => {
+        // Send first 3 likes to service worker for offline caching
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller && Array.isArray(songs)) {
+          const audioUrls = songs.slice(0, 3).map(song => song.audio).filter(Boolean);
+          navigator.serviceWorker.controller.postMessage({
+            type: 'CACHE_LIKED_SONGS',
+            songs: audioUrls
+          });
+        }
+      });
     }
   }, [user, fetchLikedSongs]);
 
