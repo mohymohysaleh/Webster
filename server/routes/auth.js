@@ -147,9 +147,10 @@ router.patch('/update-profile', verifyRefreshToken, async (req, res) => {
 
     // Update the cookie
     res.cookie('refresh_token', refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'Lax',
+       httpOnly: true,
+      secure: true,
+      sameSite: 'None',
+      path: '/',
       maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
     });
     
@@ -172,8 +173,9 @@ router.patch('/update-profile', verifyRefreshToken, async (req, res) => {
 router.post('/logout', (req, res) => {
   res.clearCookie('refresh_token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'Lax'
+    secure: true,
+    sameSite: 'None',
+    path: '/',
   });
   res.json({ message: 'Logged out' });
 });
