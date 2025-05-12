@@ -9,7 +9,6 @@ module.exports = (server) => {
     }
   });
 
-// server/config/socket.js
 io.on('connection', (socket) => {
     console.log(`User connected ${socket.id}`);
   
