@@ -2,9 +2,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
-import './LiveStream.css';
+import './liveStream.css';
 
-const SIGNALING_SERVER_URL = 'http://localhost:3000';
+const SIGNALING_SERVER_URL = process.env.VITE_API_URL || 'https://webster-production.up.railway.app';
 
 const Listener = ({ onBack }) => {
   const [isListening, setIsListening] = useState(false);

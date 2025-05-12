@@ -198,12 +198,13 @@ export function MusicPlayer({ onSongAdded }) {
         song={currentSong}
         onSongAdded={handleSongAdded}
       />
-     <AddToCommentModal
-  isOpen={isAddToCommentModalOpen}
-  onClose={() => setIsAddToCommentModalOpen(false)}
-  song={currentSong}
+      
+      <AddToCommentModal
+        isOpen={isAddToCommentModalOpen}
+        onClose={() => setIsAddToCommentModalOpen(false)}
+        songId={currentSong._id}
+     />
 
-/>
 </div>)
   
 }

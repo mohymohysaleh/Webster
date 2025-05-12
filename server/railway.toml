@@ -1,9 +1,13 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install"
-nixpacks = { node-version = "20" }
+buildCommand = "cd server && npm install --omit=dev --no-package-lock"
 
 [deploy]
-startCommand = "npm start"
+startCommand = "cd server && node server.js"
 healthcheckPath = "/health"
-healthcheckTimeout = 300 
+healthcheckTimeout = 300
+
+[nixpacks]
+node-version = "18"
+npm-version = "10.2.4"
+install-command = "npm install --omit=dev --no-package-lock" 

@@ -13,6 +13,20 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'https://webster-production.up.railway.app',
+        changeOrigin: true,
+        secure: true
+      },
+      '/auth': {
+        target: process.env.VITE_API_URL || 'https://webster-production.up.railway.app',
+        changeOrigin: true,
+        secure: true
+      }
+    }
+  },
   optimizeDeps: {
     esbuildOptions: {
       define: {

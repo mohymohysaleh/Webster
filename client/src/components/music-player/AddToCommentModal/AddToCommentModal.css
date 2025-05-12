@@ -1,14 +1,14 @@
-.comments-list {
-  max-height: 150px;
-  overflow-y: auto;
-  margin-bottom: 10px;
-  border: 1px solid #eee;
-  padding: 10px;
-  border-radius: 4px;
-  background-color: #f9f9f9;
+.comment-item {
+  color: #222; /* Dark text for readability */
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
-.comment-item {
-  margin-bottom: 8px;
-  font-size: 0.9rem;
+/* Optional: Make sure the container isn’t too bright */
+.comments-list {
+  background-color: #f9f9f9; /* Light gray instead of white */
+  padding: 10px;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
 }

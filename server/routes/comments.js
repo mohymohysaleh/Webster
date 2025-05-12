@@ -4,33 +4,44 @@ const Comment = require('../models/comment');
 const verifyRefreshToken = require('../middleware/verifyToken');
 
 // GET comments for a song
-router.get('/:songId',  verifyRefreshToken, async (req, res) => {
+router.get('/:songId', verifyRefreshToken, async (req, res) => {
+  console.log('🔍 GET /api/comments/:songId hit');
+  console.log('Song ID:', req.params.songId);
+  console.log('Authenticated user:', req.user);
+
   try {
-    const comments = await Comment.find({ song: req.song.id })
-      .populate('user', 'name')
-      .sort({ createdAt: -1 });
+    const comments = await Comment.find({ song: req.params.songId })
+      .populate('user', 'name');
+
+    console.log('Fetched comments:', comments);
     res.json(comments);
   } catch (err) {
-    console.error('Error fetching comments:', err);
+    console.error('❌ Error fetching comments:', err);
     res.status(500).json({ error: 'Failed to fetch comments' });
   }
 });
-
 // POST a new comment
-router.post('/:songId',verifyRefreshToken, async (req, res) => {
+router.post('/:songId', verifyRefreshToken, async (req, res) => {
+  console.log('👉 POST /api/comments/:songId');
+  console.log('Request params:', req.params);
+  console.log('Request body:', req.body);
+  console.log('Authenticated user (req.user):', req.user);
+
   try {
     const newComment = await Comment.create({
       text: req.body.text,
       song: req.params.songId,
-      user: req.user._id
+      user: req.user.id 
     });
+
     const populatedComment = await newComment.populate('user', 'name');
     res.status(201).json(populatedComment);
   } catch (err) {
-    console.error('Error fetching comments:', err);
-    res.status(500).json({ error: 'Failed to fetch comments' });
+    console.error('❌ Error in comment creation:', err);
+    res.status(500).json({ error: 'Internal Server Error during comment creation' });
   }
 });
+
 
 // DELETE a comment
 router.delete('/:commentId',verifyRefreshToken, async (req, res) => {
