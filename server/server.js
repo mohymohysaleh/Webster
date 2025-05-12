@@ -111,7 +111,7 @@ const server = http.createServer(app);
 // ✅ Attach socket.io
 const io = new Server(server, {
   cors: {
-    origin: "*", 
+    origin: "*" || 'https://webster-tau.vercel.app', 
     methods: ["GET", "POST"]
   }
 });
