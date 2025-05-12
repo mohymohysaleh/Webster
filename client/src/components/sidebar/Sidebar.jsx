@@ -106,6 +106,8 @@ export function Sidebar() {
           </nav>
         </div>
       </div>
+      {/* Overlay for mobile sidebar */}
+      {open && <div className="sidebar-overlay" onClick={() => setOpen(false)}></div>}
     </>
   )
 }

@@ -76,7 +76,11 @@
     font-size: 1.2rem;
   }
   .music-player .bg-secondary {
-    width: 36px !important;
-    height: 36px !important;
+    width: 56px !important;
+    height: 56px !important;
+  }
+  .music-player .col-3 .volume-bar,
+  .music-player .col-3 .volume-icon {
+    display: none !important;
   }
 }
