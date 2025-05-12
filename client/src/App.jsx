@@ -1,3 +1,5 @@
+//client\src\App.jsx
+
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { PlaylistProvider } from './contexts/PlaylistContext';
@@ -5,7 +7,8 @@ import { MusicProvider } from './context/MusicContext';
 import { CommentProvider } from './contexts/CommentContext';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-
+// Add to your imports in App.jsx
+import LiveStreamPage from './pages/liveStream/liveStream';
 import Login from './components/Login';
 import GoogleCallback from './components/GoogleCallback';
 import { MusicPlayer } from "./components/music-player/MusicPlayer";
@@ -128,6 +131,14 @@ function AppRoutes() {
               </PrivateRoute>
             }
           />
+
+          <Route
+          path="/live-stream"
+           element={
+               <PrivateRoute>
+               <LiveStreamPage />
+               </PrivateRoute>
+                    }/>
           <Route
             path="/settings"
             element={

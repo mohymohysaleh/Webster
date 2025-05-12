@@ -5,10 +5,6 @@ require('dotenv').config();
 // // Load environment variables from .env file
 // dotenv.config({ path: path.join(__dirname, '../.env') });
 
-<<<<<<< HEAD
-// MongoDB connection URI
-const Mongo_Uri = 'mongodb+srv://kareem:123@webster.wmzywee.mongodb.net/?retryWrites=true&w=majority&appName=webster';
-=======
 // Use environment variable for MongoDB URI
 const Mongo_Uri = process.env.MONGODB_URI;
 
@@ -16,7 +12,6 @@ if (!Mongo_Uri) {
   console.error('MongoDB URI is not defined in environment variables');
   process.exit(1);
 }
->>>>>>> 741d2dad7f95993e7ba6c61aded68bbe958e91bb
 
 // Mongoose model for Music
 const musicSchema = new mongoose.Schema({

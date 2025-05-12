@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom"
-import { Home, Search, ListMusic, PlusCircle, Heart } from "lucide-react"
+import { Home, Search, ListMusic, PlusCircle, Heart,  Radio} from "lucide-react"
 import "./Sidebar.css"
 import Img1 from '../../assets/images/Webster.png'
 import { useAuth } from '../../contexts/AuthContext'
@@ -57,6 +57,14 @@ export function Sidebar() {
             <PlusCircle size={20} />
             <span>Create Playlist</span>
           </Link>
+
+          <Link
+  to="/live-stream"
+  className={`nav-link d-flex align-items-center gap-3 ${location.pathname === "/live-stream" ? "text-white" : "text-secondary"}`}
+>
+  <Radio size={20} />
+  <span>Live Stream</span>
+</Link>
 
           {user?.role === 'admin' && (
             <Link
