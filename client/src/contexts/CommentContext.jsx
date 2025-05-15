@@ -55,7 +55,7 @@ export const CommentProvider = ({ children }) => {
       throw error;
     }
   }, []);
-  // Removed misplaced onSubmit block as it was not integrated properly
+  
 
   const deleteComment = async (commentId, songId) => {
     try {

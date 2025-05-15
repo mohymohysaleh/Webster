@@ -1,12 +1,12 @@
 .comment-item {
-  color: #222; /* Dark text for readability */
+  color: #222; 
   font-size: 14px;
   margin-bottom: 8px;
 }
 
-/* Optional: Make sure the container isn’t too bright */
+
 .comments-list {
-  background-color: #f9f9f9; /* Light gray instead of white */
+  background-color: #f9f9f9; 
   padding: 10px;
   border-radius: 5px;
   max-height: 200px;

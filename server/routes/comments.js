@@ -5,7 +5,7 @@ const verifyRefreshToken = require('../middleware/verifyToken');
 
 // GET comments for a song
 router.get('/:songId', verifyRefreshToken, async (req, res) => {
-  console.log('🔍 GET /api/comments/:songId hit');
+  console.log(' GET /api/comments/:songId hit');
   console.log('Song ID:', req.params.songId);
   console.log('Authenticated user:', req.user);
 
@@ -16,13 +16,13 @@ router.get('/:songId', verifyRefreshToken, async (req, res) => {
     console.log('Fetched comments:', comments);
     res.json(comments);
   } catch (err) {
-    console.error('❌ Error fetching comments:', err);
+    console.error(' Error fetching comments:', err);
     res.status(500).json({ error: 'Failed to fetch comments' });
   }
 });
 // POST a new comment
 router.post('/:songId', verifyRefreshToken, async (req, res) => {
-  console.log('👉 POST /api/comments/:songId');
+  console.log('POST /api/comments/:songId');
   console.log('Request params:', req.params);
   console.log('Request body:', req.body);
   console.log('Authenticated user (req.user):', req.user);
@@ -37,7 +37,7 @@ router.post('/:songId', verifyRefreshToken, async (req, res) => {
     const populatedComment = await newComment.populate('user', 'name');
     res.status(201).json(populatedComment);
   } catch (err) {
-    console.error('❌ Error in comment creation:', err);
+    console.error(' Error in comment creation:', err);
     res.status(500).json({ error: 'Internal Server Error during comment creation' });
   }
 });
